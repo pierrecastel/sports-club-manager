@@ -1,0 +1,50 @@
+// Pour exemple
+entity Member {
+	phoneNumber String minlength(10) maxlength(20),
+	photo ImageBlob
+}
+
+// A ajouter à UserExtra
+entity Address {
+	street String minlength(1) maxlength(200) required,
+	zipCode String minlength(5) maxlength(5) required,
+	city String minlength(1) maxlength(100) required
+}
+
+entity Event {
+	title String minlength(1) maxlength(100) required,
+	type EventType required,
+	date LocalDate required,
+	comment String minlength(1) maxlength(1000)
+}
+
+enum EventType {
+    TRAINING, MATCH, TOURNAMENT, CODIR, OTHER
+}
+
+entity Team {
+	name String minlength(1) maxlength(100) required
+}
+
+relationship OneToOne {
+	Team{manager} to User,
+	Event{team} to Team
+}
+
+relationship ManyToMany {
+	Team{member} to User,
+	Event{participant} to User
+}
+
+// Set pagination options
+paginate Team with infinite-scroll
+paginate Event with pagination
+
+// set DTO option
+dto * with mapstruct
+
+// Set service options to all
+service * with serviceImpl
+
+// Set an angular suffix
+angularSuffix * with scm

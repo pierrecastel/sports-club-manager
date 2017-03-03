@@ -20,5 +20,17 @@
 
     <cache alias="org.npvb.scm.domain.User.persistentTokens" uses-template="simple"/>
 
+    <cache alias="org.npvb.scm.domain.Address" uses-template="simple"/>
+
+    <cache alias="org.npvb.scm.domain.Event" uses-template="simple"/>
+
+    <cache alias="org.npvb.scm.domain.Event.participants" uses-template="simple"/>
+
+    <cache alias="org.npvb.scm.domain.Member" uses-template="simple"/>
+
+    <cache alias="org.npvb.scm.domain.Team" uses-template="simple"/>
+
+    <cache alias="org.npvb.scm.domain.Team.members" uses-template="simple"/>
+
     <!-- jhipster-needle-ehcache-add-entry -->
 </config>
