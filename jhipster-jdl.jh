@@ -26,7 +26,7 @@ entity Team {
 	name String minlength(1) maxlength(100) required
 }
 
-relationship OneToOne {
+relationship ManyToOne {
 	Team{manager} to User,
 	Event{team} to Team
 }

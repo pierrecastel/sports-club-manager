@@ -38,15 +38,8 @@ export class EventScmDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.teamService.query({filter: 'event-is-null'}).subscribe((res: Response) => {
-            if (!this.event.teamId) {
-                this.teams = res.json();
-            } else {
-                this.teamService.find(this.event.teamId).subscribe((subRes: TeamScm) => {
-                    this.teams = [subRes].concat(res.json());
-                }, (subRes: Response) => this.onError(subRes.json()));
-            }
-        }, (res: Response) => this.onError(res.json()));
+        this.teamService.query().subscribe(
+            (res: Response) => { this.teams = res.json(); }, (res: Response) => this.onError(res.json()));
         this.userService.query().subscribe(
             (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
     }

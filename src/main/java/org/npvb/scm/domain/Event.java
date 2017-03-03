@@ -45,8 +45,7 @@ public class Event implements Serializable {
     @Column(name = "comment", length = 1000)
     private String comment;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
     private Team team;
 
     @ManyToMany

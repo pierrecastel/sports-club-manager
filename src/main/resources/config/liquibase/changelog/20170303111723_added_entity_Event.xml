@@ -37,9 +37,11 @@
             <column name="comment" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
+
             <column name="team_id" type="bigint">
-                <constraints unique="true" nullable="true" />
+                <constraints nullable="true" />
             </column>
+
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
         

@@ -85,7 +85,7 @@
 
         <div class="form-group">
             <label jhiTranslate="scmApp.event.team" for="field_team">Team</label>
-            <select class="form-control" id="field_team" name="team" [(ngModel)]="event.teamId">
+            <select class="form-control" id="field_team" name="team" [(ngModel)]="event.teamId" >
                 <option [ngValue]="null"></option>
                 <option [ngValue]="teamOption.id" *ngFor="let teamOption of teams; trackBy: trackTeamById">{{teamOption.id}}</option>
             </select>

@@ -29,8 +29,7 @@ public class Team implements Serializable {
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
     private User manager;
 
     @ManyToMany

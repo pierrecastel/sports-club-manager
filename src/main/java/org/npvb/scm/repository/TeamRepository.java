@@ -13,6 +13,9 @@ import java.util.List;
 @SuppressWarnings("unused")
 public interface TeamRepository extends JpaRepository<Team,Long> {
 
+    @Query("select team from Team team where team.manager.login = ?#{principal.username}")
+    List<Team> findByManagerIsCurrentUser();
+
     @Query("select distinct team from Team team left join fetch team.members")
     List<Team> findAllWithEagerRelationships();
 
