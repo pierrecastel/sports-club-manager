@@ -9,6 +9,7 @@ import { TeamScm } from './team-scm.model';
 import { TeamScmPopupService } from './team-scm-popup.service';
 import { TeamScmService } from './team-scm.service';
 import { User, UserService } from '../../shared';
+
 @Component({
     selector: 'jhi-team-scm-dialog',
     templateUrl: './team-scm-dialog.component.html'
@@ -45,10 +46,12 @@ export class TeamScmDialogComponent implements OnInit {
         this.isSaving = true;
         if (this.team.id !== undefined) {
             this.teamService.update(this.team)
-                .subscribe((res: TeamScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: TeamScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.teamService.create(this.team)
-                .subscribe((res: TeamScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: TeamScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 

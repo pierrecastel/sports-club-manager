@@ -106,13 +106,13 @@ public class MemberResourceIntTest {
      */
     public static Member createEntity(EntityManager em) {
         Member member = new Member()
-                .phoneNumber(DEFAULT_PHONE_NUMBER)
-                .mobilePhoneNumber(DEFAULT_MOBILE_PHONE_NUMBER)
-                .photo(DEFAULT_PHOTO)
-                .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE)
-                .birthDate(DEFAULT_BIRTH_DATE)
-                .job(DEFAULT_JOB)
-                .showInfo(DEFAULT_SHOW_INFO);
+            .phoneNumber(DEFAULT_PHONE_NUMBER)
+            .mobilePhoneNumber(DEFAULT_MOBILE_PHONE_NUMBER)
+            .photo(DEFAULT_PHOTO)
+            .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE)
+            .birthDate(DEFAULT_BIRTH_DATE)
+            .job(DEFAULT_JOB)
+            .showInfo(DEFAULT_SHOW_INFO);
         return member;
     }
 
@@ -128,7 +128,6 @@ public class MemberResourceIntTest {
 
         // Create the Member
         MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
-
         restMemberMockMvc.perform(post("/api/members")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(memberDTO)))
@@ -153,14 +152,13 @@ public class MemberResourceIntTest {
         int databaseSizeBeforeCreate = memberRepository.findAll().size();
 
         // Create the Member with an existing ID
-        Member existingMember = new Member();
-        existingMember.setId(1L);
-        MemberDTO existingMemberDTO = memberMapper.memberToMemberDTO(existingMember);
+        member.setId(1L);
+        MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMemberMockMvc.perform(post("/api/members")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existingMemberDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(memberDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -226,13 +224,13 @@ public class MemberResourceIntTest {
         // Update the member
         Member updatedMember = memberRepository.findOne(member.getId());
         updatedMember
-                .phoneNumber(UPDATED_PHONE_NUMBER)
-                .mobilePhoneNumber(UPDATED_MOBILE_PHONE_NUMBER)
-                .photo(UPDATED_PHOTO)
-                .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
-                .birthDate(UPDATED_BIRTH_DATE)
-                .job(UPDATED_JOB)
-                .showInfo(UPDATED_SHOW_INFO);
+            .phoneNumber(UPDATED_PHONE_NUMBER)
+            .mobilePhoneNumber(UPDATED_MOBILE_PHONE_NUMBER)
+            .photo(UPDATED_PHOTO)
+            .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+            .birthDate(UPDATED_BIRTH_DATE)
+            .job(UPDATED_JOB)
+            .showInfo(UPDATED_SHOW_INFO);
         MemberDTO memberDTO = memberMapper.memberToMemberDTO(updatedMember);
 
         restMemberMockMvc.perform(put("/api/members")
@@ -290,6 +288,7 @@ public class MemberResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Member.class);
     }

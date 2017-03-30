@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Mapper for the entity Member and its DTO MemberDTO.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {AddressMapper.class, })
 public interface MemberMapper {
 
     @Mapping(source = "address.id", target = "addressId")
@@ -21,13 +21,22 @@ public interface MemberMapper {
     Member memberDTOToMember(MemberDTO memberDTO);
 
     List<Member> memberDTOsToMembers(List<MemberDTO> memberDTOs);
-
-    default Address addressFromId(Long id) {
+    /**
+     * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
+     * creating a new attribute to know if the entity has any relationship from some other entity
+     *
+     * @param id id of the entity
+     * @return the entity instance
+     */
+     
+    default Member memberFromId(Long id) {
         if (id == null) {
             return null;
         }
-        Address address = new Address();
-        address.setId(id);
-        return address;
+        Member member = new Member();
+        member.setId(id);
+        return member;
     }
+    
+
 }

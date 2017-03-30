@@ -86,7 +86,7 @@ public class LocationResourceIntTest {
      */
     public static Location createEntity(EntityManager em) {
         Location location = new Location()
-                .title(DEFAULT_TITLE);
+            .title(DEFAULT_TITLE);
         return location;
     }
 
@@ -102,7 +102,6 @@ public class LocationResourceIntTest {
 
         // Create the Location
         LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
-
         restLocationMockMvc.perform(post("/api/locations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(locationDTO)))
@@ -121,14 +120,13 @@ public class LocationResourceIntTest {
         int databaseSizeBeforeCreate = locationRepository.findAll().size();
 
         // Create the Location with an existing ID
-        Location existingLocation = new Location();
-        existingLocation.setId(1L);
-        LocationDTO existingLocationDTO = locationMapper.locationToLocationDTO(existingLocation);
+        location.setId(1L);
+        LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restLocationMockMvc.perform(post("/api/locations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existingLocationDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(locationDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -201,7 +199,7 @@ public class LocationResourceIntTest {
         // Update the location
         Location updatedLocation = locationRepository.findOne(location.getId());
         updatedLocation
-                .title(UPDATED_TITLE);
+            .title(UPDATED_TITLE);
         LocationDTO locationDTO = locationMapper.locationToLocationDTO(updatedLocation);
 
         restLocationMockMvc.perform(put("/api/locations")
@@ -253,6 +251,7 @@ public class LocationResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Location.class);
     }

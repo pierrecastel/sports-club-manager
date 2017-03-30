@@ -71,7 +71,7 @@
                 <input id="field_birthDate" type="text" class="form-control" name="birthDate" ngbDatepicker  #birthDateDp="ngbDatepicker" [(ngModel)]="member.birthDate"
                 />
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" (click)="birthDateDp.open()"><i class="fa fa-calendar"></i></button>
+                    <button type="button" class="btn btn-default" (click)="birthDateDp.toggle()"><i class="fa fa-calendar"></i></button>
                 </span>
             </div>
         </div>

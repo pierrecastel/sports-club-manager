@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "4.0.6",
+    "jhipsterVersion": "4.1.1",
     "baseName": "scm",
     "packageName": "org.npvb.scm",
     "packageFolder": "org/npvb/scm",

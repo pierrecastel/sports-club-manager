@@ -108,13 +108,13 @@ public class EventResourceIntTest {
      */
     public static Event createEntity(EntityManager em) {
         Event event = new Event()
-                .title(DEFAULT_TITLE)
-                .type(DEFAULT_TYPE)
-                .date(DEFAULT_DATE)
-                .state(DEFAULT_STATE)
-                .numberOfPlaces(DEFAULT_NUMBER_OF_PLACES)
-                .isHome(DEFAULT_IS_HOME)
-                .comment(DEFAULT_COMMENT);
+            .title(DEFAULT_TITLE)
+            .type(DEFAULT_TYPE)
+            .date(DEFAULT_DATE)
+            .state(DEFAULT_STATE)
+            .numberOfPlaces(DEFAULT_NUMBER_OF_PLACES)
+            .isHome(DEFAULT_IS_HOME)
+            .comment(DEFAULT_COMMENT);
         return event;
     }
 
@@ -130,7 +130,6 @@ public class EventResourceIntTest {
 
         // Create the Event
         EventDTO eventDTO = eventMapper.eventToEventDTO(event);
-
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
@@ -155,14 +154,13 @@ public class EventResourceIntTest {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 
         // Create the Event with an existing ID
-        Event existingEvent = new Event();
-        existingEvent.setId(1L);
-        EventDTO existingEventDTO = eventMapper.eventToEventDTO(existingEvent);
+        event.setId(1L);
+        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existingEventDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -304,13 +302,13 @@ public class EventResourceIntTest {
         // Update the event
         Event updatedEvent = eventRepository.findOne(event.getId());
         updatedEvent
-                .title(UPDATED_TITLE)
-                .type(UPDATED_TYPE)
-                .date(UPDATED_DATE)
-                .state(UPDATED_STATE)
-                .numberOfPlaces(UPDATED_NUMBER_OF_PLACES)
-                .isHome(UPDATED_IS_HOME)
-                .comment(UPDATED_COMMENT);
+            .title(UPDATED_TITLE)
+            .type(UPDATED_TYPE)
+            .date(UPDATED_DATE)
+            .state(UPDATED_STATE)
+            .numberOfPlaces(UPDATED_NUMBER_OF_PLACES)
+            .isHome(UPDATED_IS_HOME)
+            .comment(UPDATED_COMMENT);
         EventDTO eventDTO = eventMapper.eventToEventDTO(updatedEvent);
 
         restEventMockMvc.perform(put("/api/events")
@@ -368,6 +366,7 @@ public class EventResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Event.class);
     }

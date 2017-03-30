@@ -8,6 +8,7 @@ import { EventManager, AlertService, JhiLanguageService } from 'ng-jhipster';
 import { AddressScm } from './address-scm.model';
 import { AddressScmPopupService } from './address-scm-popup.service';
 import { AddressScmService } from './address-scm.service';
+
 @Component({
     selector: 'jhi-address-scm-dialog',
     templateUrl: './address-scm-dialog.component.html'
@@ -39,10 +40,12 @@ export class AddressScmDialogComponent implements OnInit {
         this.isSaving = true;
         if (this.address.id !== undefined) {
             this.addressService.update(this.address)
-                .subscribe((res: AddressScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: AddressScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.addressService.create(this.address)
-                .subscribe((res: AddressScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: AddressScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 

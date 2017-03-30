@@ -29,5 +29,7 @@ export class EventScm {
         public teamId?: number,
         public locationId?: number,
         public participantId?: number,
-    ) { }
+    ) {
+        this.isHome = false;
+    }
 }

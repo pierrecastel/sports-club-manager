@@ -9,6 +9,7 @@ import { MemberScm } from './member-scm.model';
 import { MemberScmPopupService } from './member-scm-popup.service';
 import { MemberScmService } from './member-scm.service';
 import { AddressScm, AddressScmService } from '../address';
+
 @Component({
     selector: 'jhi-member-scm-dialog',
     templateUrl: './member-scm-dialog.component.html'
@@ -73,10 +74,12 @@ export class MemberScmDialogComponent implements OnInit {
         this.isSaving = true;
         if (this.member.id !== undefined) {
             this.memberService.update(this.member)
-                .subscribe((res: MemberScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: MemberScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.memberService.create(this.member)
-                .subscribe((res: MemberScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: MemberScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 
