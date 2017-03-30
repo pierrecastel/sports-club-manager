@@ -8,6 +8,12 @@
             "otherEntityField": "id"
         },
         {
+            "relationshipType": "many-to-one",
+            "relationshipName": "substitute",
+            "otherEntityName": "user",
+            "otherEntityField": "id"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityRelationshipName": "",
             "relationshipName": "member",
@@ -21,11 +27,9 @@
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
-                "minlength",
                 "maxlength",
                 "required"
             ],
-            "fieldValidateRulesMinlength": 1,
             "fieldValidateRulesMaxlength": 100
         }
     ],

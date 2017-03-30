@@ -16,6 +16,18 @@
         <dd>
             <span>{{event.date | date:'mediumDate'}}</span>
         </dd>
+        <dt><span jhiTranslate="scmApp.event.state">State</span></dt>
+        <dd>
+            <span jhiTranslate="{{'scmApp.EventState.' + event.state}}">{{event.state}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.event.numberOfPlaces">Number Of Places</span></dt>
+        <dd>
+            <span>{{event.numberOfPlaces}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.event.isHome">Is Home</span></dt>
+        <dd>
+            <span>{{event.isHome}}</span>
+        </dd>
         <dt><span jhiTranslate="scmApp.event.comment">Comment</span></dt>
         <dd>
             <span>{{event.comment}}</span>
@@ -24,6 +36,12 @@
         <dd>
             <div *ngIf="event.teamId">
                 <a [routerLink]="['/team-scm', event.teamId]">{{event.teamId}}</a>
+            </div>
+        </dd>
+        <dt><span jhiTranslate="scmApp.event.location">Location</span></dt>
+        <dd>
+            <div *ngIf="event.locationId">
+                <a [routerLink]="['/location-scm', event.locationId]">{{event.locationId}}</a>
             </div>
         </dd>
         <dt><span jhiTranslate="scmApp.event.participant">Participant</span></dt>

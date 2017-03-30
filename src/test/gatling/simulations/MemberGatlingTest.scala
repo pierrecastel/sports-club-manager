@@ -68,7 +68,7 @@ class MemberGatlingTest extends Simulation {
             .exec(http("Create new member")
             .post("/api/members")
             .headers(headers_http_authenticated)
-            .body(StringBody("""{"id":null, "phoneNumber":"SAMPLE_TEXT", "photo":null}""")).asJSON
+            .body(StringBody("""{"id":null, "phoneNumber":"SAMPLE_TEXT", "mobilePhoneNumber":"SAMPLE_TEXT", "photo":null, "birthDate":"2020-01-01T00:00:00.000Z", "job":"SAMPLE_TEXT", "showInfo":null}""")).asJSON
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_member_url"))).exitHereIfFailed
             .pause(10)

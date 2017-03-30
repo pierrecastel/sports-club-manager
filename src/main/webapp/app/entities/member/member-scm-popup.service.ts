@@ -21,6 +21,13 @@ export class MemberScmPopupService {
 
         if (id) {
             this.memberService.find(id).subscribe(member => {
+                if (member.birthDate) {
+                    member.birthDate = {
+                        year: member.birthDate.getFullYear(),
+                        month: member.birthDate.getMonth() + 1,
+                        day: member.birthDate.getDate()
+                    };
+                }
                 this.memberModalRef(component, member);
             });
         } else {

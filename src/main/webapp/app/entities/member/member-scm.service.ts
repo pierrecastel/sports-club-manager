@@ -3,15 +3,18 @@ import { Http, Response, URLSearchParams, BaseRequestOptions } from '@angular/ht
 import { Observable } from 'rxjs/Rx';
 
 import { MemberScm } from './member-scm.model';
+import { DateUtils } from 'ng-jhipster';
 @Injectable()
 export class MemberScmService {
 
     private resourceUrl = 'api/members';
 
-    constructor(private http: Http) { }
+    constructor(private http: Http, private dateUtils: DateUtils) { }
 
     create(member: MemberScm): Observable<MemberScm> {
         let copy: MemberScm = Object.assign({}, member);
+        copy.birthDate = this.dateUtils
+            .convertLocalDateToServer(member.birthDate);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
             return res.json();
         });
@@ -19,6 +22,8 @@ export class MemberScmService {
 
     update(member: MemberScm): Observable<MemberScm> {
         let copy: MemberScm = Object.assign({}, member);
+        copy.birthDate = this.dateUtils
+            .convertLocalDateToServer(member.birthDate);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
             return res.json();
         });
@@ -26,13 +31,17 @@ export class MemberScmService {
 
     find(id: number): Observable<MemberScm> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
-            return res.json();
+            let jsonResponse = res.json();
+            jsonResponse.birthDate = this.dateUtils
+                .convertLocalDateFromServer(jsonResponse.birthDate);
+            return jsonResponse;
         });
     }
 
     query(req?: any): Observable<Response> {
         let options = this.createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
+            .map((res: any) => this.convertResponse(res))
         ;
     }
 
@@ -41,6 +50,15 @@ export class MemberScmService {
     }
 
 
+    private convertResponse(res: any): any {
+        let jsonResponse = res.json();
+        for (let i = 0; i < jsonResponse.length; i++) {
+            jsonResponse[i].birthDate = this.dateUtils
+                .convertLocalDateFromServer(jsonResponse[i].birthDate);
+        }
+        res._body = jsonResponse;
+        return res;
+    }
 
     private createRequestOption(req?: any): BaseRequestOptions {
         let options: BaseRequestOptions = new BaseRequestOptions();

@@ -23,7 +23,7 @@ public class Address implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 200)
+    @Size(max = 200)
     @Column(name = "street", length = 200, nullable = false)
     private String street;
 
@@ -33,7 +33,7 @@ public class Address implements Serializable {
     private String zipCode;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "city", length = 100, nullable = false)
     private String city;
 

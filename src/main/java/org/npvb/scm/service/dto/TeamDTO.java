@@ -15,10 +15,12 @@ public class TeamDTO implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     private String name;
 
     private Long managerId;
+
+    private Long substituteId;
 
     private Set<UserDTO> members = new HashSet<>();
 
@@ -43,6 +45,14 @@ public class TeamDTO implements Serializable {
 
     public void setManagerId(Long userId) {
         this.managerId = userId;
+    }
+
+    public Long getSubstituteId() {
+        return substituteId;
+    }
+
+    public void setSubstituteId(Long userId) {
+        this.substituteId = userId;
     }
 
     public Set<UserDTO> getMembers() {

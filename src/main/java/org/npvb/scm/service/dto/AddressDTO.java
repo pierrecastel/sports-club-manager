@@ -13,7 +13,7 @@ public class AddressDTO implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 200)
+    @Size(max = 200)
     private String street;
 
     @NotNull
@@ -21,7 +21,7 @@ public class AddressDTO implements Serializable {
     private String zipCode;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     private String city;
 
     public Long getId() {

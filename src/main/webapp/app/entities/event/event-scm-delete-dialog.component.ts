@@ -22,7 +22,7 @@ export class EventScmDeleteDialogComponent {
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['event', 'eventType']);
+        this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
     clear () {

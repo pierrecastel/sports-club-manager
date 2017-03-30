@@ -13,11 +13,13 @@ import java.util.List;
 public interface EventMapper {
 
     @Mapping(source = "team.id", target = "teamId")
+    @Mapping(source = "location.id", target = "locationId")
     EventDTO eventToEventDTO(Event event);
 
     List<EventDTO> eventsToEventDTOs(List<Event> events);
 
     @Mapping(source = "teamId", target = "team")
+    @Mapping(source = "locationId", target = "location")
     Event eventDTOToEvent(EventDTO eventDTO);
 
     List<Event> eventDTOsToEvents(List<EventDTO> eventDTOs);
@@ -29,5 +31,14 @@ public interface EventMapper {
         Team team = new Team();
         team.setId(id);
         return team;
+    }
+
+    default Location locationFromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Location location = new Location();
+        location.setId(id);
+        return location;
     }
 }

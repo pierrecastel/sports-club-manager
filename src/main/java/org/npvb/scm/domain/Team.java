@@ -25,12 +25,15 @@ public class Team implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "name", length = 100, nullable = false)
     private String name;
 
     @ManyToOne
     private User manager;
+
+    @ManyToOne
+    private User substitute;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -71,6 +74,19 @@ public class Team implements Serializable {
 
     public void setManager(User user) {
         this.manager = user;
+    }
+
+    public User getSubstitute() {
+        return substitute;
+    }
+
+    public Team substitute(User user) {
+        this.substitute = user;
+        return this;
+    }
+
+    public void setSubstitute(User user) {
+        this.substitute = user;
     }
 
     public Set<User> getMembers() {

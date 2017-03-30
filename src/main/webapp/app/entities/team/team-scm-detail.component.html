@@ -12,6 +12,10 @@
         <dd>
             {{team.managerId}}
         </dd>
+        <dt><span jhiTranslate="scmApp.team.substitute">Substitute</span></dt>
+        <dd>
+            {{team.substituteId}}
+        </dd>
         <dt><span jhiTranslate="scmApp.team.member">Member</span></dt>
         <dd>
             <span *ngFor="let member of team.members; let last = last">

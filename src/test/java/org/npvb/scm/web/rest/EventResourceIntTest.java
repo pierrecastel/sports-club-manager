@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import org.npvb.scm.domain.enumeration.EventType;
+import org.npvb.scm.domain.enumeration.EventState;
 /**
  * Test class for the EventResource REST controller.
  *
@@ -51,6 +52,15 @@ public class EventResourceIntTest {
 
     private static final LocalDate DEFAULT_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final EventState DEFAULT_STATE = EventState.INIT;
+    private static final EventState UPDATED_STATE = EventState.OPEN;
+
+    private static final Integer DEFAULT_NUMBER_OF_PLACES = 1;
+    private static final Integer UPDATED_NUMBER_OF_PLACES = 2;
+
+    private static final Boolean DEFAULT_IS_HOME = false;
+    private static final Boolean UPDATED_IS_HOME = true;
 
     private static final String DEFAULT_COMMENT = "AAAAAAAAAA";
     private static final String UPDATED_COMMENT = "BBBBBBBBBB";
@@ -101,6 +111,9 @@ public class EventResourceIntTest {
                 .title(DEFAULT_TITLE)
                 .type(DEFAULT_TYPE)
                 .date(DEFAULT_DATE)
+                .state(DEFAULT_STATE)
+                .numberOfPlaces(DEFAULT_NUMBER_OF_PLACES)
+                .isHome(DEFAULT_IS_HOME)
                 .comment(DEFAULT_COMMENT);
         return event;
     }
@@ -130,6 +143,9 @@ public class EventResourceIntTest {
         assertThat(testEvent.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testEvent.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testEvent.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testEvent.getState()).isEqualTo(DEFAULT_STATE);
+        assertThat(testEvent.getNumberOfPlaces()).isEqualTo(DEFAULT_NUMBER_OF_PLACES);
+        assertThat(testEvent.isIsHome()).isEqualTo(DEFAULT_IS_HOME);
         assertThat(testEvent.getComment()).isEqualTo(DEFAULT_COMMENT);
     }
 
@@ -213,6 +229,25 @@ public class EventResourceIntTest {
 
     @Test
     @Transactional
+    public void checkStateIsRequired() throws Exception {
+        int databaseSizeBeforeTest = eventRepository.findAll().size();
+        // set the field null
+        event.setState(null);
+
+        // Create the Event, which fails.
+        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+
+        restEventMockMvc.perform(post("/api/events")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Event> eventList = eventRepository.findAll();
+        assertThat(eventList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllEvents() throws Exception {
         // Initialize the database
         eventRepository.saveAndFlush(event);
@@ -225,6 +260,9 @@ public class EventResourceIntTest {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE.toString())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].state").value(hasItem(DEFAULT_STATE.toString())))
+            .andExpect(jsonPath("$.[*].numberOfPlaces").value(hasItem(DEFAULT_NUMBER_OF_PLACES)))
+            .andExpect(jsonPath("$.[*].isHome").value(hasItem(DEFAULT_IS_HOME.booleanValue())))
             .andExpect(jsonPath("$.[*].comment").value(hasItem(DEFAULT_COMMENT.toString())));
     }
 
@@ -242,6 +280,9 @@ public class EventResourceIntTest {
             .andExpect(jsonPath("$.title").value(DEFAULT_TITLE.toString()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()))
+            .andExpect(jsonPath("$.state").value(DEFAULT_STATE.toString()))
+            .andExpect(jsonPath("$.numberOfPlaces").value(DEFAULT_NUMBER_OF_PLACES))
+            .andExpect(jsonPath("$.isHome").value(DEFAULT_IS_HOME.booleanValue()))
             .andExpect(jsonPath("$.comment").value(DEFAULT_COMMENT.toString()));
     }
 
@@ -266,6 +307,9 @@ public class EventResourceIntTest {
                 .title(UPDATED_TITLE)
                 .type(UPDATED_TYPE)
                 .date(UPDATED_DATE)
+                .state(UPDATED_STATE)
+                .numberOfPlaces(UPDATED_NUMBER_OF_PLACES)
+                .isHome(UPDATED_IS_HOME)
                 .comment(UPDATED_COMMENT);
         EventDTO eventDTO = eventMapper.eventToEventDTO(updatedEvent);
 
@@ -281,6 +325,9 @@ public class EventResourceIntTest {
         assertThat(testEvent.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testEvent.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testEvent.getDate()).isEqualTo(UPDATED_DATE);
+        assertThat(testEvent.getState()).isEqualTo(UPDATED_STATE);
+        assertThat(testEvent.getNumberOfPlaces()).isEqualTo(UPDATED_NUMBER_OF_PLACES);
+        assertThat(testEvent.isIsHome()).isEqualTo(UPDATED_IS_HOME);
         assertThat(testEvent.getComment()).isEqualTo(UPDATED_COMMENT);
     }
 

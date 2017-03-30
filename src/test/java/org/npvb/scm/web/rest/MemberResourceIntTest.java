@@ -25,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,10 +46,22 @@ public class MemberResourceIntTest {
     private static final String DEFAULT_PHONE_NUMBER = "AAAAAAAAAA";
     private static final String UPDATED_PHONE_NUMBER = "BBBBBBBBBB";
 
+    private static final String DEFAULT_MOBILE_PHONE_NUMBER = "AAAAAAAAAA";
+    private static final String UPDATED_MOBILE_PHONE_NUMBER = "BBBBBBBBBB";
+
     private static final byte[] DEFAULT_PHOTO = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_PHOTO = TestUtil.createByteArray(2, "1");
     private static final String DEFAULT_PHOTO_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_PHOTO_CONTENT_TYPE = "image/png";
+
+    private static final LocalDate DEFAULT_BIRTH_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_BIRTH_DATE = LocalDate.now(ZoneId.systemDefault());
+
+    private static final String DEFAULT_JOB = "AAAAAAAAAA";
+    private static final String UPDATED_JOB = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_SHOW_INFO = false;
+    private static final Boolean UPDATED_SHOW_INFO = true;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -93,8 +107,12 @@ public class MemberResourceIntTest {
     public static Member createEntity(EntityManager em) {
         Member member = new Member()
                 .phoneNumber(DEFAULT_PHONE_NUMBER)
+                .mobilePhoneNumber(DEFAULT_MOBILE_PHONE_NUMBER)
                 .photo(DEFAULT_PHOTO)
-                .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE);
+                .photoContentType(DEFAULT_PHOTO_CONTENT_TYPE)
+                .birthDate(DEFAULT_BIRTH_DATE)
+                .job(DEFAULT_JOB)
+                .showInfo(DEFAULT_SHOW_INFO);
         return member;
     }
 
@@ -121,8 +139,12 @@ public class MemberResourceIntTest {
         assertThat(memberList).hasSize(databaseSizeBeforeCreate + 1);
         Member testMember = memberList.get(memberList.size() - 1);
         assertThat(testMember.getPhoneNumber()).isEqualTo(DEFAULT_PHONE_NUMBER);
+        assertThat(testMember.getMobilePhoneNumber()).isEqualTo(DEFAULT_MOBILE_PHONE_NUMBER);
         assertThat(testMember.getPhoto()).isEqualTo(DEFAULT_PHOTO);
         assertThat(testMember.getPhotoContentType()).isEqualTo(DEFAULT_PHOTO_CONTENT_TYPE);
+        assertThat(testMember.getBirthDate()).isEqualTo(DEFAULT_BIRTH_DATE);
+        assertThat(testMember.getJob()).isEqualTo(DEFAULT_JOB);
+        assertThat(testMember.isShowInfo()).isEqualTo(DEFAULT_SHOW_INFO);
     }
 
     @Test
@@ -158,8 +180,12 @@ public class MemberResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(member.getId().intValue())))
             .andExpect(jsonPath("$.[*].phoneNumber").value(hasItem(DEFAULT_PHONE_NUMBER.toString())))
+            .andExpect(jsonPath("$.[*].mobilePhoneNumber").value(hasItem(DEFAULT_MOBILE_PHONE_NUMBER.toString())))
             .andExpect(jsonPath("$.[*].photoContentType").value(hasItem(DEFAULT_PHOTO_CONTENT_TYPE)))
-            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))));
+            .andExpect(jsonPath("$.[*].photo").value(hasItem(Base64Utils.encodeToString(DEFAULT_PHOTO))))
+            .andExpect(jsonPath("$.[*].birthDate").value(hasItem(DEFAULT_BIRTH_DATE.toString())))
+            .andExpect(jsonPath("$.[*].job").value(hasItem(DEFAULT_JOB.toString())))
+            .andExpect(jsonPath("$.[*].showInfo").value(hasItem(DEFAULT_SHOW_INFO.booleanValue())));
     }
 
     @Test
@@ -174,8 +200,12 @@ public class MemberResourceIntTest {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(member.getId().intValue()))
             .andExpect(jsonPath("$.phoneNumber").value(DEFAULT_PHONE_NUMBER.toString()))
+            .andExpect(jsonPath("$.mobilePhoneNumber").value(DEFAULT_MOBILE_PHONE_NUMBER.toString()))
             .andExpect(jsonPath("$.photoContentType").value(DEFAULT_PHOTO_CONTENT_TYPE))
-            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)));
+            .andExpect(jsonPath("$.photo").value(Base64Utils.encodeToString(DEFAULT_PHOTO)))
+            .andExpect(jsonPath("$.birthDate").value(DEFAULT_BIRTH_DATE.toString()))
+            .andExpect(jsonPath("$.job").value(DEFAULT_JOB.toString()))
+            .andExpect(jsonPath("$.showInfo").value(DEFAULT_SHOW_INFO.booleanValue()));
     }
 
     @Test
@@ -197,8 +227,12 @@ public class MemberResourceIntTest {
         Member updatedMember = memberRepository.findOne(member.getId());
         updatedMember
                 .phoneNumber(UPDATED_PHONE_NUMBER)
+                .mobilePhoneNumber(UPDATED_MOBILE_PHONE_NUMBER)
                 .photo(UPDATED_PHOTO)
-                .photoContentType(UPDATED_PHOTO_CONTENT_TYPE);
+                .photoContentType(UPDATED_PHOTO_CONTENT_TYPE)
+                .birthDate(UPDATED_BIRTH_DATE)
+                .job(UPDATED_JOB)
+                .showInfo(UPDATED_SHOW_INFO);
         MemberDTO memberDTO = memberMapper.memberToMemberDTO(updatedMember);
 
         restMemberMockMvc.perform(put("/api/members")
@@ -211,8 +245,12 @@ public class MemberResourceIntTest {
         assertThat(memberList).hasSize(databaseSizeBeforeUpdate);
         Member testMember = memberList.get(memberList.size() - 1);
         assertThat(testMember.getPhoneNumber()).isEqualTo(UPDATED_PHONE_NUMBER);
+        assertThat(testMember.getMobilePhoneNumber()).isEqualTo(UPDATED_MOBILE_PHONE_NUMBER);
         assertThat(testMember.getPhoto()).isEqualTo(UPDATED_PHOTO);
         assertThat(testMember.getPhotoContentType()).isEqualTo(UPDATED_PHOTO_CONTENT_TYPE);
+        assertThat(testMember.getBirthDate()).isEqualTo(UPDATED_BIRTH_DATE);
+        assertThat(testMember.getJob()).isEqualTo(UPDATED_JOB);
+        assertThat(testMember.isShowInfo()).isEqualTo(UPDATED_SHOW_INFO);
     }
 
     @Test

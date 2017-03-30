@@ -8,6 +8,7 @@ import { EventManager, AlertService, JhiLanguageService, DataUtils } from 'ng-jh
 import { MemberScm } from './member-scm.model';
 import { MemberScmPopupService } from './member-scm-popup.service';
 import { MemberScmService } from './member-scm.service';
+import { AddressScm, AddressScmService } from '../address';
 @Component({
     selector: 'jhi-member-scm-dialog',
     templateUrl: './member-scm-dialog.component.html'
@@ -17,12 +18,15 @@ export class MemberScmDialogComponent implements OnInit {
     member: MemberScm;
     authorities: any[];
     isSaving: boolean;
+
+    addresses: AddressScm[];
     constructor(
         public activeModal: NgbActiveModal,
         private jhiLanguageService: JhiLanguageService,
         private dataUtils: DataUtils,
         private alertService: AlertService,
         private memberService: MemberScmService,
+        private addressService: AddressScmService,
         private eventManager: EventManager
     ) {
         this.jhiLanguageService.setLocations(['member']);
@@ -31,6 +35,15 @@ export class MemberScmDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        this.addressService.query({filter: 'member-is-null'}).subscribe((res: Response) => {
+            if (!this.member.addressId) {
+                this.addresses = res.json();
+            } else {
+                this.addressService.find(this.member.addressId).subscribe((subRes: AddressScm) => {
+                    this.addresses = [subRes].concat(res.json());
+                }, (subRes: Response) => this.onError(subRes.json()));
+            }
+        }, (res: Response) => this.onError(res.json()));
     }
     byteSize(field) {
         return this.dataUtils.byteSize(field);
@@ -80,6 +93,10 @@ export class MemberScmDialogComponent implements OnInit {
 
     private onError (error) {
         this.alertService.error(error.message, null, null);
+    }
+
+    trackAddressById(index: number, item: AddressScm) {
+        return item.id;
     }
 }
 

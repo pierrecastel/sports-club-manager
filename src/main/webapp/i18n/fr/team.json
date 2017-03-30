@@ -17,6 +17,7 @@
             },
             "name": "Name",
             "manager": "Manager",
+            "substitute": "Substitute",
             "member": "Member"
         }
     }

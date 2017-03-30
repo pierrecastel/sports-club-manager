@@ -32,5 +32,7 @@
 
     <cache alias="org.npvb.scm.domain.Team.members" uses-template="simple"/>
 
+    <cache alias="org.npvb.scm.domain.Location" uses-template="simple"/>
+
     <!-- jhipster-needle-ehcache-add-entry -->
 </config>

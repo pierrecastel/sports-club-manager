@@ -13,6 +13,8 @@ import java.util.Objects;
 
 import org.npvb.scm.domain.enumeration.EventType;
 
+import org.npvb.scm.domain.enumeration.EventState;
+
 /**
  * A Event.
  */
@@ -28,7 +30,7 @@ public class Event implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     @Column(name = "title", length = 100, nullable = false)
     private String title;
 
@@ -41,12 +43,26 @@ public class Event implements Serializable {
     @Column(name = "date", nullable = false)
     private LocalDate date;
 
-    @Size(min = 1, max = 1000)
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "state", nullable = false)
+    private EventState state;
+
+    @Column(name = "number_of_places")
+    private Integer numberOfPlaces;
+
+    @Column(name = "is_home")
+    private Boolean isHome;
+
+    @Size(max = 1000)
     @Column(name = "comment", length = 1000)
     private String comment;
 
     @ManyToOne
     private Team team;
+
+    @ManyToOne
+    private Location location;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -102,6 +118,45 @@ public class Event implements Serializable {
         this.date = date;
     }
 
+    public EventState getState() {
+        return state;
+    }
+
+    public Event state(EventState state) {
+        this.state = state;
+        return this;
+    }
+
+    public void setState(EventState state) {
+        this.state = state;
+    }
+
+    public Integer getNumberOfPlaces() {
+        return numberOfPlaces;
+    }
+
+    public Event numberOfPlaces(Integer numberOfPlaces) {
+        this.numberOfPlaces = numberOfPlaces;
+        return this;
+    }
+
+    public void setNumberOfPlaces(Integer numberOfPlaces) {
+        this.numberOfPlaces = numberOfPlaces;
+    }
+
+    public Boolean isIsHome() {
+        return isHome;
+    }
+
+    public Event isHome(Boolean isHome) {
+        this.isHome = isHome;
+        return this;
+    }
+
+    public void setIsHome(Boolean isHome) {
+        this.isHome = isHome;
+    }
+
     public String getComment() {
         return comment;
     }
@@ -126,6 +181,19 @@ public class Event implements Serializable {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public Event location(Location location) {
+        this.location = location;
+        return this;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public Set<User> getParticipants() {
@@ -178,6 +246,9 @@ public class Event implements Serializable {
             ", title='" + title + "'" +
             ", type='" + type + "'" +
             ", date='" + date + "'" +
+            ", state='" + state + "'" +
+            ", numberOfPlaces='" + numberOfPlaces + "'" +
+            ", isHome='" + isHome + "'" +
             ", comment='" + comment + "'" +
             '}';
     }

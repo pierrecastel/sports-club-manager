@@ -34,11 +34,27 @@
                 <constraints nullable="false" />
             </column>
 
+            <column name="state" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+
+            <column name="number_of_places" type="integer">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="is_home" type="bit">
+                <constraints nullable="true" />
+            </column>
+
             <column name="comment" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
 
             <column name="team_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="location_id" type="bigint">
                 <constraints nullable="true" />
             </column>
 

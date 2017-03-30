@@ -6,6 +6,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 /**
@@ -26,12 +27,29 @@ public class Member implements Serializable {
     @Column(name = "phone_number", length = 20)
     private String phoneNumber;
 
+    @Size(min = 10, max = 20)
+    @Column(name = "mobile_phone_number", length = 20)
+    private String mobilePhoneNumber;
+
     @Lob
     @Column(name = "photo")
     private byte[] photo;
 
     @Column(name = "photo_content_type")
     private String photoContentType;
+
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+    @Column(name = "job")
+    private String job;
+
+    @Column(name = "show_info")
+    private Boolean showInfo;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private Address address;
 
     public Long getId() {
         return id;
@@ -52,6 +70,19 @@ public class Member implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getMobilePhoneNumber() {
+        return mobilePhoneNumber;
+    }
+
+    public Member mobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
+        return this;
+    }
+
+    public void setMobilePhoneNumber(String mobilePhoneNumber) {
+        this.mobilePhoneNumber = mobilePhoneNumber;
     }
 
     public byte[] getPhoto() {
@@ -80,6 +111,58 @@ public class Member implements Serializable {
         this.photoContentType = photoContentType;
     }
 
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public Member birthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+        return this;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public Member job(String job) {
+        this.job = job;
+        return this;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
+    public Boolean isShowInfo() {
+        return showInfo;
+    }
+
+    public Member showInfo(Boolean showInfo) {
+        this.showInfo = showInfo;
+        return this;
+    }
+
+    public void setShowInfo(Boolean showInfo) {
+        this.showInfo = showInfo;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public Member address(Address address) {
+        this.address = address;
+        return this;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -105,8 +188,12 @@ public class Member implements Serializable {
         return "Member{" +
             "id=" + id +
             ", phoneNumber='" + phoneNumber + "'" +
+            ", mobilePhoneNumber='" + mobilePhoneNumber + "'" +
             ", photo='" + photo + "'" +
             ", photoContentType='" + photoContentType + "'" +
+            ", birthDate='" + birthDate + "'" +
+            ", job='" + job + "'" +
+            ", showInfo='" + showInfo + "'" +
             '}';
     }
 }

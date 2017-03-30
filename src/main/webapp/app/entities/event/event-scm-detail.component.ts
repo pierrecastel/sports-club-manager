@@ -18,7 +18,7 @@ export class EventScmDetailComponent implements OnInit, OnDestroy {
         private eventService: EventScmService,
         private route: ActivatedRoute
     ) {
-        this.jhiLanguageService.setLocations(['event', 'eventType']);
+        this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
     ngOnInit() {

@@ -14,6 +14,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
+        <addForeignKeyConstraint baseColumnNames="substitute_id"
+                                 baseTableName="team"
+                                 constraintName="fk_team_substitute_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
         <addForeignKeyConstraint baseColumnNames="teams_id"
                                  baseTableName="team_member"
                                  constraintName="fk_team_member_teams_id"

@@ -9,6 +9,7 @@ import { EventScm } from './event-scm.model';
 import { EventScmPopupService } from './event-scm-popup.service';
 import { EventScmService } from './event-scm.service';
 import { TeamScm, TeamScmService } from '../team';
+import { LocationScm, LocationScmService } from '../location';
 import { User, UserService } from '../../shared';
 @Component({
     selector: 'jhi-event-scm-dialog',
@@ -22,6 +23,8 @@ export class EventScmDialogComponent implements OnInit {
 
     teams: TeamScm[];
 
+    locations: LocationScm[];
+
     users: User[];
     constructor(
         public activeModal: NgbActiveModal,
@@ -29,10 +32,11 @@ export class EventScmDialogComponent implements OnInit {
         private alertService: AlertService,
         private eventService: EventScmService,
         private teamService: TeamScmService,
+        private locationService: LocationScmService,
         private userService: UserService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['event', 'eventType']);
+        this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
     ngOnInit() {
@@ -40,6 +44,8 @@ export class EventScmDialogComponent implements OnInit {
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
         this.teamService.query().subscribe(
             (res: Response) => { this.teams = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.locationService.query().subscribe(
+            (res: Response) => { this.locations = res.json(); }, (res: Response) => this.onError(res.json()));
         this.userService.query().subscribe(
             (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
     }
@@ -74,6 +80,10 @@ export class EventScmDialogComponent implements OnInit {
     }
 
     trackTeamById(index: number, item: TeamScm) {
+        return item.id;
+    }
+
+    trackLocationById(index: number, item: LocationScm) {
         return item.id;
     }
 

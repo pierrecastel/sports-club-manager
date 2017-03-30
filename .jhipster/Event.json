@@ -8,6 +8,12 @@
             "otherEntityField": "id"
         },
         {
+            "relationshipType": "many-to-one",
+            "relationshipName": "location",
+            "otherEntityName": "location",
+            "otherEntityField": "id"
+        },
+        {
             "relationshipType": "many-to-many",
             "otherEntityRelationshipName": "",
             "relationshipName": "participant",
@@ -21,11 +27,9 @@
             "fieldName": "title",
             "fieldType": "String",
             "fieldValidateRules": [
-                "minlength",
                 "maxlength",
                 "required"
             ],
-            "fieldValidateRulesMinlength": 1,
             "fieldValidateRulesMaxlength": 100
         },
         {
@@ -44,13 +48,27 @@
             ]
         },
         {
+            "fieldName": "state",
+            "fieldType": "EventState",
+            "fieldValues": "INIT,OPEN,CLOSED,ENDED,CANCELED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "numberOfPlaces",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "isHome",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "comment",
             "fieldType": "String",
             "fieldValidateRules": [
-                "minlength",
                 "maxlength"
             ],
-            "fieldValidateRulesMinlength": 1,
             "fieldValidateRulesMaxlength": 1000
         }
     ],

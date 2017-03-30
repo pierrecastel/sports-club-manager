@@ -18,8 +18,12 @@
             "title": "Title",
             "type": "Type",
             "date": "Date",
+            "state": "State",
+            "numberOfPlaces": "Number Of Places",
+            "isHome": "Is Home",
             "comment": "Comment",
             "team": "Team",
+            "location": "Location",
             "participant": "Participant"
         }
     }

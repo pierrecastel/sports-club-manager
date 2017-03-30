@@ -3,6 +3,7 @@ export class TeamScm {
         public id?: number,
         public name?: string,
         public managerId?: number,
+        public substituteId?: number,
         public memberId?: number,
     ) { }
 }

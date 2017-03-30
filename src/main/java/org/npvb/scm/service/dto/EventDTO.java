@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Objects;
 import org.npvb.scm.domain.enumeration.EventType;
+import org.npvb.scm.domain.enumeration.EventState;
 
 /**
  * A DTO for the Event entity.
@@ -16,7 +17,7 @@ public class EventDTO implements Serializable {
     private Long id;
 
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(max = 100)
     private String title;
 
     @NotNull
@@ -25,10 +26,19 @@ public class EventDTO implements Serializable {
     @NotNull
     private LocalDate date;
 
-    @Size(min = 1, max = 1000)
+    @NotNull
+    private EventState state;
+
+    private Integer numberOfPlaces;
+
+    private Boolean isHome;
+
+    @Size(max = 1000)
     private String comment;
 
     private Long teamId;
+
+    private Long locationId;
 
     private Set<UserDTO> participants = new HashSet<>();
 
@@ -60,6 +70,27 @@ public class EventDTO implements Serializable {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+    public EventState getState() {
+        return state;
+    }
+
+    public void setState(EventState state) {
+        this.state = state;
+    }
+    public Integer getNumberOfPlaces() {
+        return numberOfPlaces;
+    }
+
+    public void setNumberOfPlaces(Integer numberOfPlaces) {
+        this.numberOfPlaces = numberOfPlaces;
+    }
+    public Boolean getIsHome() {
+        return isHome;
+    }
+
+    public void setIsHome(Boolean isHome) {
+        this.isHome = isHome;
+    }
     public String getComment() {
         return comment;
     }
@@ -74,6 +105,14 @@ public class EventDTO implements Serializable {
 
     public void setTeamId(Long teamId) {
         this.teamId = teamId;
+    }
+
+    public Long getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(Long locationId) {
+        this.locationId = locationId;
     }
 
     public Set<UserDTO> getParticipants() {
@@ -112,6 +151,9 @@ public class EventDTO implements Serializable {
             ", title='" + title + "'" +
             ", type='" + type + "'" +
             ", date='" + date + "'" +
+            ", state='" + state + "'" +
+            ", numberOfPlaces='" + numberOfPlaces + "'" +
+            ", isHome='" + isHome + "'" +
             ", comment='" + comment + "'" +
             '}';
     }

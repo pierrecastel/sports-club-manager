@@ -49,7 +49,7 @@ currentAccount: any;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
         });
-        this.jhiLanguageService.setLocations(['event', 'eventType']);
+        this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
     loadAll() {

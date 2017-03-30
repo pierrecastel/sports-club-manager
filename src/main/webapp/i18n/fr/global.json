@@ -11,6 +11,7 @@
                 "eventScm": "Event",
                 "memberScm": "Member",
                 "teamScm": "Team",
+                "locationScm": "Location",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

@@ -8,6 +8,10 @@
         <dd>
             <span>{{member.phoneNumber}}</span>
         </dd>
+        <dt><span jhiTranslate="scmApp.member.mobilePhoneNumber">Mobile Phone Number</span></dt>
+        <dd>
+            <span>{{member.mobilePhoneNumber}}</span>
+        </dd>
         <dt><span jhiTranslate="scmApp.member.photo">Photo</span></dt>
         <dd>
             <div *ngIf="member.photo">
@@ -15,6 +19,24 @@
                     <img [src]="'data:' + member.photoContentType + ';base64,' + member.photo" style="max-width: 100%;" alt="member image"/>
                 </a>
                 {{member.photoContentType}}, {{byteSize(member.photo)}}
+            </div>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.birthDate">Birth Date</span></dt>
+        <dd>
+            <span>{{member.birthDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.job">Job</span></dt>
+        <dd>
+            <span>{{member.job}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.showInfo">Show Info</span></dt>
+        <dd>
+            <span>{{member.showInfo}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.address">Address</span></dt>
+        <dd>
+            <div *ngIf="member.addressId">
+                <a [routerLink]="['/address-scm', member.addressId]">{{member.addressId}}</a>
             </div>
         </dd>
     </dl>

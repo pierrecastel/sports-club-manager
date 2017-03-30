@@ -16,7 +16,12 @@
                 "title": "Member"
             },
             "phoneNumber": "Phone Number",
-            "photo": "Photo"
+            "mobilePhoneNumber": "Mobile Phone Number",
+            "photo": "Photo",
+            "birthDate": "Birth Date",
+            "job": "Job",
+            "showInfo": "Show Info",
+            "address": "Address"
         }
     }
 }

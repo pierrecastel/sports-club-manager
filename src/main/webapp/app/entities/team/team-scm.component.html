@@ -19,6 +19,7 @@
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="name"><span jhiTranslate="scmApp.team.name">Name</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="managerId"><span jhiTranslate="scmApp.team.manager">Manager</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="substituteId"><span jhiTranslate="scmApp.team.substitute">Substitute</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -28,6 +29,9 @@
                 <td>{{team.name}}</td>
                 <td>
                     {{team.managerId}}
+                </td>
+                <td>
+                    {{team.substituteId}}
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">

@@ -4,6 +4,7 @@ import { ScmAddressScmModule } from './address/address-scm.module';
 import { ScmEventScmModule } from './event/event-scm.module';
 import { ScmMemberScmModule } from './member/member-scm.module';
 import { ScmTeamScmModule } from './team/team-scm.module';
+import { ScmLocationScmModule } from './location/location-scm.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -12,6 +13,7 @@ import { ScmTeamScmModule } from './team/team-scm.module';
         ScmEventScmModule,
         ScmMemberScmModule,
         ScmTeamScmModule,
+        ScmLocationScmModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

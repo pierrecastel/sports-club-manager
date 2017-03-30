@@ -6,11 +6,9 @@
             "fieldName": "street",
             "fieldType": "String",
             "fieldValidateRules": [
-                "minlength",
                 "maxlength",
                 "required"
             ],
-            "fieldValidateRulesMinlength": 1,
             "fieldValidateRulesMaxlength": 200
         },
         {
@@ -28,11 +26,9 @@
             "fieldName": "city",
             "fieldType": "String",
             "fieldValidateRules": [
-                "minlength",
                 "maxlength",
                 "required"
             ],
-            "fieldValidateRulesMinlength": 1,
             "fieldValidateRulesMaxlength": 100
         }
     ],
