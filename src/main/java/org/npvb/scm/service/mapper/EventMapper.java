@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Mapper for the entity Event and its DTO EventDTO.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class, })
+@Mapper(componentModel = "spring", uses = {TeamMapper.class, LocationMapper.class, UserMapper.class, })
 public interface EventMapper {
 
     @Mapping(source = "team.id", target = "teamId")
@@ -23,22 +23,22 @@ public interface EventMapper {
     Event eventDTOToEvent(EventDTO eventDTO);
 
     List<Event> eventDTOsToEvents(List<EventDTO> eventDTOs);
-
-    default Team teamFromId(Long id) {
+    /**
+     * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
+     * creating a new attribute to know if the entity has any relationship from some other entity
+     *
+     * @param id id of the entity
+     * @return the entity instance
+     */
+     
+    default Event eventFromId(Long id) {
         if (id == null) {
             return null;
         }
-        Team team = new Team();
-        team.setId(id);
-        return team;
+        Event event = new Event();
+        event.setId(id);
+        return event;
     }
+    
 
-    default Location locationFromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        Location location = new Location();
-        location.setId(id);
-        return location;
-    }
 }

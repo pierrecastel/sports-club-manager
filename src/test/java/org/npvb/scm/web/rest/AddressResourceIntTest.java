@@ -92,9 +92,9 @@ public class AddressResourceIntTest {
      */
     public static Address createEntity(EntityManager em) {
         Address address = new Address()
-                .street(DEFAULT_STREET)
-                .zipCode(DEFAULT_ZIP_CODE)
-                .city(DEFAULT_CITY);
+            .street(DEFAULT_STREET)
+            .zipCode(DEFAULT_ZIP_CODE)
+            .city(DEFAULT_CITY);
         return address;
     }
 
@@ -110,7 +110,6 @@ public class AddressResourceIntTest {
 
         // Create the Address
         AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
-
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
@@ -131,14 +130,13 @@ public class AddressResourceIntTest {
         int databaseSizeBeforeCreate = addressRepository.findAll().size();
 
         // Create the Address with an existing ID
-        Address existingAddress = new Address();
-        existingAddress.setId(1L);
-        AddressDTO existingAddressDTO = addressMapper.addressToAddressDTO(existingAddress);
+        address.setId(1L);
+        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existingAddressDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -253,9 +251,9 @@ public class AddressResourceIntTest {
         // Update the address
         Address updatedAddress = addressRepository.findOne(address.getId());
         updatedAddress
-                .street(UPDATED_STREET)
-                .zipCode(UPDATED_ZIP_CODE)
-                .city(UPDATED_CITY);
+            .street(UPDATED_STREET)
+            .zipCode(UPDATED_ZIP_CODE)
+            .city(UPDATED_CITY);
         AddressDTO addressDTO = addressMapper.addressToAddressDTO(updatedAddress);
 
         restAddressMockMvc.perform(put("/api/addresses")
@@ -309,6 +307,7 @@ public class AddressResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Address.class);
     }

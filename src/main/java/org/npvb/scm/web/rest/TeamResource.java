@@ -88,12 +88,10 @@ public class TeamResource {
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of teams in body
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @GetMapping("/teams")
     @Timed
-    public ResponseEntity<List<TeamDTO>> getAllTeams(@ApiParam Pageable pageable)
-        throws URISyntaxException {
+    public ResponseEntity<List<TeamDTO>> getAllTeams(@ApiParam Pageable pageable) {
         log.debug("REST request to get a page of Teams");
         Page<TeamDTO> page = teamService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/teams");

@@ -86,7 +86,7 @@ public class TeamResourceIntTest {
      */
     public static Team createEntity(EntityManager em) {
         Team team = new Team()
-                .name(DEFAULT_NAME);
+            .name(DEFAULT_NAME);
         return team;
     }
 
@@ -102,7 +102,6 @@ public class TeamResourceIntTest {
 
         // Create the Team
         TeamDTO teamDTO = teamMapper.teamToTeamDTO(team);
-
         restTeamMockMvc.perform(post("/api/teams")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(teamDTO)))
@@ -121,14 +120,13 @@ public class TeamResourceIntTest {
         int databaseSizeBeforeCreate = teamRepository.findAll().size();
 
         // Create the Team with an existing ID
-        Team existingTeam = new Team();
-        existingTeam.setId(1L);
-        TeamDTO existingTeamDTO = teamMapper.teamToTeamDTO(existingTeam);
+        team.setId(1L);
+        TeamDTO teamDTO = teamMapper.teamToTeamDTO(team);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTeamMockMvc.perform(post("/api/teams")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(existingTeamDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(teamDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
@@ -201,7 +199,7 @@ public class TeamResourceIntTest {
         // Update the team
         Team updatedTeam = teamRepository.findOne(team.getId());
         updatedTeam
-                .name(UPDATED_NAME);
+            .name(UPDATED_NAME);
         TeamDTO teamDTO = teamMapper.teamToTeamDTO(updatedTeam);
 
         restTeamMockMvc.perform(put("/api/teams")
@@ -253,6 +251,7 @@ public class TeamResourceIntTest {
     }
 
     @Test
+    @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Team.class);
     }

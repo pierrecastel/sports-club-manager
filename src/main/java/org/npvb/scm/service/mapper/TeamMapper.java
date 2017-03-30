@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Mapper for the entity Team and its DTO TeamDTO.
  */
-@Mapper(componentModel = "spring", uses = {UserMapper.class, UserMapper.class, UserMapper.class, })
+@Mapper(componentModel = "spring", uses = {UserMapper.class, })
 public interface TeamMapper {
 
     @Mapping(source = "manager.id", target = "managerId")
@@ -23,4 +23,22 @@ public interface TeamMapper {
     Team teamDTOToTeam(TeamDTO teamDTO);
 
     List<Team> teamDTOsToTeams(List<TeamDTO> teamDTOs);
+    /**
+     * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
+     * creating a new attribute to know if the entity has any relationship from some other entity
+     *
+     * @param id id of the entity
+     * @return the entity instance
+     */
+     
+    default Team teamFromId(Long id) {
+        if (id == null) {
+            return null;
+        }
+        Team team = new Team();
+        team.setId(id);
+        return team;
+    }
+    
+
 }

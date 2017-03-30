@@ -4,5 +4,6 @@ export class AddressScm {
         public street?: string,
         public zipCode?: string,
         public city?: string,
-    ) { }
+    ) {
+    }
 }

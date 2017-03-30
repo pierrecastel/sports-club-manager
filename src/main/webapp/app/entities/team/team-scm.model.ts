@@ -5,5 +5,6 @@ export class TeamScm {
         public managerId?: number,
         public substituteId?: number,
         public memberId?: number,
-    ) { }
+    ) {
+    }
 }

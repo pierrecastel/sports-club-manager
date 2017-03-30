@@ -9,6 +9,7 @@ import { LocationScm } from './location-scm.model';
 import { LocationScmPopupService } from './location-scm-popup.service';
 import { LocationScmService } from './location-scm.service';
 import { AddressScm, AddressScmService } from '../address';
+
 @Component({
     selector: 'jhi-location-scm-dialog',
     templateUrl: './location-scm-dialog.component.html'
@@ -52,10 +53,12 @@ export class LocationScmDialogComponent implements OnInit {
         this.isSaving = true;
         if (this.location.id !== undefined) {
             this.locationService.update(this.location)
-                .subscribe((res: LocationScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: LocationScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.locationService.create(this.location)
-                .subscribe((res: LocationScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: LocationScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 

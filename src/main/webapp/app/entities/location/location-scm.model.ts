@@ -3,5 +3,6 @@ export class LocationScm {
         public id?: number,
         public title?: string,
         public addressId?: number,
-    ) { }
+    ) {
+    }
 }

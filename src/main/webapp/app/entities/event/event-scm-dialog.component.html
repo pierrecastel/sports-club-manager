@@ -52,7 +52,7 @@
                 <input id="field_date" type="text" class="form-control" name="date" ngbDatepicker  #dateDp="ngbDatepicker" [(ngModel)]="event.date"
                 required/>
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" (click)="dateDp.open()"><i class="fa fa-calendar"></i></button>
+                    <button type="button" class="btn btn-default" (click)="dateDp.toggle()"><i class="fa fa-calendar"></i></button>
                 </span>
             </div>
             <div [hidden]="!(editForm.controls.date?.dirty && editForm.controls.date?.invalid)">

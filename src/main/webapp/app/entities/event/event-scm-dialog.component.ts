@@ -11,6 +11,7 @@ import { EventScmService } from './event-scm.service';
 import { TeamScm, TeamScmService } from '../team';
 import { LocationScm, LocationScmService } from '../location';
 import { User, UserService } from '../../shared';
+
 @Component({
     selector: 'jhi-event-scm-dialog',
     templateUrl: './event-scm-dialog.component.html'
@@ -57,10 +58,12 @@ export class EventScmDialogComponent implements OnInit {
         this.isSaving = true;
         if (this.event.id !== undefined) {
             this.eventService.update(this.event)
-                .subscribe((res: EventScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: EventScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         } else {
             this.eventService.create(this.event)
-                .subscribe((res: EventScm) => this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                .subscribe((res: EventScm) =>
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
         }
     }
 

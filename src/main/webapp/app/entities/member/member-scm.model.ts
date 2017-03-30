@@ -8,5 +8,7 @@ export class MemberScm {
         public job?: string,
         public showInfo?: boolean,
         public addressId?: number,
-    ) { }
+    ) {
+        this.showInfo = false;
+    }
 }

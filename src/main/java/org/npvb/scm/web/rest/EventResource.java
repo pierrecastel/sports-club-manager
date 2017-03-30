@@ -88,12 +88,10 @@ public class EventResource {
      *
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of events in body
-     * @throws URISyntaxException if there is an error to generate the pagination HTTP headers
      */
     @GetMapping("/events")
     @Timed
-    public ResponseEntity<List<EventDTO>> getAllEvents(@ApiParam Pageable pageable)
-        throws URISyntaxException {
+    public ResponseEntity<List<EventDTO>> getAllEvents(@ApiParam Pageable pageable) {
         log.debug("REST request to get a page of Events");
         Page<EventDTO> page = eventService.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/events");
