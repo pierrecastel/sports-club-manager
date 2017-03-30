@@ -1,0 +1,56 @@
+
+<div *ngIf="member">
+    <h2><span jhiTranslate="scmApp.member.detail.title">Member</span> {{member.id}}</h2>
+    <hr>
+    <jhi-alert-error></jhi-alert-error>
+    <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="scmApp.member.phoneNumber">Phone Number</span></dt>
+        <dd>
+            <span>{{member.phoneNumber}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.mobilePhoneNumber">Mobile Phone Number</span></dt>
+        <dd>
+            <span>{{member.mobilePhoneNumber}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.photo">Photo</span></dt>
+        <dd>
+            <div *ngIf="member.photo">
+                <a (click)="openFile(member.photoContentType, member.photo)">
+                    <img [src]="'data:' + member.photoContentType + ';base64,' + member.photo" style="max-width: 100%;" alt="member image"/>
+                </a>
+                {{member.photoContentType}}, {{byteSize(member.photo)}}
+            </div>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.birthDate">Birth Date</span></dt>
+        <dd>
+            <span>{{member.birthDate | date:'mediumDate'}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.job">Job</span></dt>
+        <dd>
+            <span>{{member.job}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.showInfo">Show Info</span></dt>
+        <dd>
+            <span>{{member.showInfo}}</span>
+        </dd>
+        <dt><span jhiTranslate="scmApp.member.address">Address</span></dt>
+        <dd>
+            <div *ngIf="member.addressId">
+                <a [routerLink]="['/address-scm', member.addressId]">{{member.addressId}}</a>
+            </div>
+        </dd>
+    </dl>
+
+    <button type="submit"
+            (click)="previousState()"
+            class="btn btn-info">
+        <span class="fa fa-arrow-left"></span>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+    </button>
+
+    <button type="button"
+            [routerLink]="['/', { outlets: { popup: 'member-scm/'+ member.id + '/edit'} }]"
+            replaceUrl="true"
+            class="btn btn-primary">
+        <span class="fa fa-pencil"></span>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+    </button>
+</div>

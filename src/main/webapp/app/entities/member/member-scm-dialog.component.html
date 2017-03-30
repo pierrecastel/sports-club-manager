@@ -1,0 +1,107 @@
+
+
+<form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+
+    <div class="modal-header">
+        <h4 class="modal-title" id="myMemberLabel" jhiTranslate="scmApp.member.home.createOrEditLabel">Create or edit a Member</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                (click)="clear()">&times;</button>
+    </div>
+    <div class="modal-body">
+        <jhi-alert-error></jhi-alert-error>
+        <div class="form-group" [hidden]="!member.id">
+            <label for="id" jhiTranslate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                   [(ngModel)]="member.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="scmApp.member.phoneNumber" for="field_phoneNumber">Phone Number</label>
+            <input type="text" class="form-control" name="phoneNumber" id="field_phoneNumber"
+                [(ngModel)]="member.phoneNumber"
+            minlength="10" maxlength="20" />
+            <div [hidden]="!(editForm.controls.phoneNumber?.dirty && editForm.controls.phoneNumber?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.phoneNumber?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 10 }">
+                   This field is required to be at least 10 characters.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.phoneNumber?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
+                   This field cannot be longer than 20 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="scmApp.member.mobilePhoneNumber" for="field_mobilePhoneNumber">Mobile Phone Number</label>
+            <input type="text" class="form-control" name="mobilePhoneNumber" id="field_mobilePhoneNumber"
+                [(ngModel)]="member.mobilePhoneNumber"
+            minlength="10" maxlength="20" />
+            <div [hidden]="!(editForm.controls.mobilePhoneNumber?.dirty && editForm.controls.mobilePhoneNumber?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.mobilePhoneNumber?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 10 }">
+                   This field is required to be at least 10 characters.
+                </small>
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.mobilePhoneNumber?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
+                   This field cannot be longer than 20 characters.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="scmApp.member.photo" for="field_photo">Photo</label>
+            <div>
+                <img [src]="'data:' + member.photoContentType + ';base64,' + member.photo" style="max-height: 100px;" *ngIf="member.photo" alt="member image"/>
+                <div *ngIf="member.photo" class="form-text text-danger clearfix">
+                    <span class="pull-left">{{member.photoContentType}}, {{byteSize(member.photo)}}</span>
+                    <button type="button" (click)="member.photo=null;member.photoContentType=null;"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </div>
+                <input type="file" (change)="setFileData($event, member, 'photo', true)" accept="image/*" jhiTranslate="entity.action.addimage"/>
+            </div>
+            <input type="hidden" class="form-control" name="photo" id="field_photo"
+                [(ngModel)]="member.photo"
+             />
+            <input type="hidden" class="form-control" name="photoContentType" id="field_photoContentType"
+                [(ngModel)]="member.photoContentType" />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="scmApp.member.birthDate" for="field_birthDate">Birth Date</label>
+            <div class="input-group">
+                <input id="field_birthDate" type="text" class="form-control" name="birthDate" ngbDatepicker  #birthDateDp="ngbDatepicker" [(ngModel)]="member.birthDate"
+                />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="birthDateDp.open()"><i class="fa fa-calendar"></i></button>
+                </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="scmApp.member.job" for="field_job">Job</label>
+            <input type="text" class="form-control" name="job" id="field_job"
+                [(ngModel)]="member.job"
+             />
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="scmApp.member.showInfo" for="field_showInfo">Show Info</label>
+            <input type="checkbox" class="form-control" name="showInfo" id="field_showInfo"
+                [(ngModel)]="member.showInfo"
+             />
+        </div>
+
+        <div class="form-group">
+            <label jhiTranslate="scmApp.member.address" for="field_address">Address</label>
+            <select class="form-control" id="field_address" name="address" [(ngModel)]="member.addressId">
+                <option [ngValue]="null"></option>
+                <option [ngValue]="addressOption.id" *ngFor="let addressOption of addresses; trackBy: trackAddressById">{{addressOption.id}}</option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">
+            <span class="fa fa-ban"></span>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+            <span class="fa fa-save"></span>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>
