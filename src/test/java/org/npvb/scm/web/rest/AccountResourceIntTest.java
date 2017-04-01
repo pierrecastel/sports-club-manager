@@ -1,5 +1,10 @@
 package org.npvb.scm.web.rest;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.npvb.scm.ScmApp;
 import org.npvb.scm.domain.Authority;
 import org.npvb.scm.domain.User;
@@ -10,11 +15,6 @@ import org.npvb.scm.service.MailService;
 import org.npvb.scm.service.UserService;
 import org.npvb.scm.service.dto.UserDTO;
 import org.npvb.scm.web.rest.vm.ManagedUserVM;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -23,7 +23,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyObject;
@@ -41,6 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ScmApp.class)
 public class AccountResourceIntTest {
+
+    // TODO tests to validate phoneNumber
 
     @Autowired
     private UserRepository userRepository;
@@ -144,7 +149,8 @@ public class AccountResourceIntTest {
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
-            "joe@example.com",      // e-mail
+            "joe@example.com",              // e-mail
+            null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey
@@ -174,6 +180,7 @@ public class AccountResourceIntTest {
             "Funky",                // firstName
             "One",                  // lastName
             "funky@example.com",    // e-mail
+            null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey
@@ -203,6 +210,7 @@ public class AccountResourceIntTest {
             "Bob",              // firstName
             "Green",            // lastName
             "invalid",          // e-mail <-- invalid
+            null,                 // pnoneNumber
             true,               // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey
@@ -232,6 +240,7 @@ public class AccountResourceIntTest {
             "Bob",              // firstName
             "Green",            // lastName
             "bob@example.com",  // e-mail
+            null,                 // pnoneNumber
             true,               // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey
@@ -262,6 +271,7 @@ public class AccountResourceIntTest {
             "Alice",                // firstName
             "Something",            // lastName
             "alice@example.com",    // e-mail
+            null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey
@@ -273,7 +283,8 @@ public class AccountResourceIntTest {
 
         // Duplicate login, different email
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), validUser.getLogin(), validUser.getPassword(), validUser.getFirstName(), validUser.getLastName(),
-            "alicejr@example.com", true, validUser.getImageUrl(), validUser.getLangKey(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), validUser.getAuthorities());
+            "alicejr@example.com", validUser.getPhoneNumber(), true, validUser.getImageUrl(), validUser.getLangKey(), validUser.getCreatedBy(), validUser.getCreatedDate(),
+            validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), validUser.getAuthorities());
 
         // Good user
         restMvc.perform(
@@ -304,6 +315,7 @@ public class AccountResourceIntTest {
             "John",                 // firstName
             "Doe",                  // lastName
             "john@example.com",     // e-mail
+            null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey
@@ -315,7 +327,7 @@ public class AccountResourceIntTest {
 
         // Duplicate e-mail, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
-            validUser.getEmail(), true, validUser.getImageUrl(), validUser.getLangKey(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), validUser.getAuthorities());
+            validUser.getEmail(), validUser.getPhoneNumber(), true, validUser.getImageUrl(), validUser.getLangKey(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), validUser.getAuthorities());
 
         // Good user
         restMvc.perform(
@@ -345,6 +357,7 @@ public class AccountResourceIntTest {
             "Bad",                  // firstName
             "Guy",                  // lastName
             "badguy@example.com",   // e-mail
+            null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey

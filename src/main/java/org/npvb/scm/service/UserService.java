@@ -1,15 +1,16 @@
 package org.npvb.scm.service;
 
+import org.npvb.scm.config.Constants;
 import org.npvb.scm.domain.Authority;
+import org.npvb.scm.domain.Member;
 import org.npvb.scm.domain.User;
 import org.npvb.scm.repository.AuthorityRepository;
-import org.npvb.scm.config.Constants;
+import org.npvb.scm.repository.MemberRepository;
 import org.npvb.scm.repository.UserRepository;
 import org.npvb.scm.security.AuthoritiesConstants;
 import org.npvb.scm.security.SecurityUtils;
-import org.npvb.scm.service.util.RandomUtil;
 import org.npvb.scm.service.dto.UserDTO;
-
+import org.npvb.scm.service.util.RandomUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service class for managing users.
@@ -37,10 +41,14 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    private final MemberRepository memberRepository;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository
+        , MemberRepository memberRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.memberRepository = memberRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -56,19 +64,19 @@ public class UserService {
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
-       log.debug("Reset user password for reset key {}", key);
+        log.debug("Reset user password for reset key {}", key);
 
-       return userRepository.findOneByResetKey(key)
+        return userRepository.findOneByResetKey(key)
             .filter(user -> {
                 ZonedDateTime oneDayAgo = ZonedDateTime.now().minusHours(24);
                 return user.getResetDate().isAfter(oneDayAgo);
-           })
-           .map(user -> {
+            })
+            .map(user -> {
                 user.setPassword(passwordEncoder.encode(newPassword));
                 user.setResetKey(null);
                 user.setResetDate(null);
                 return user;
-           });
+            });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
@@ -82,7 +90,7 @@ public class UserService {
     }
 
     public User createUser(String login, String password, String firstName, String lastName, String email,
-        String imageUrl, String langKey) {
+                           String imageUrl, String langKey, String phoneNumber) {
 
         User newUser = new User();
         Authority authority = authorityRepository.findOne(AuthoritiesConstants.USER);
@@ -102,8 +110,16 @@ public class UserService {
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         authorities.add(authority);
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
+        final User createdUser = userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        // Create and save the UserExtra entity
+        final Member newMember = new Member();
+        newMember.setUser(createdUser);
+        newMember.setPhoneNumber(phoneNumber);
+        memberRepository.save(newMember);
+        log.debug("Created Information for Member: {}", newMember);
+
         return newUser;
     }
 
@@ -140,9 +156,9 @@ public class UserService {
      * Update basic information (first name, last name, email, language) for the current user.
      *
      * @param firstName first name of user
-     * @param lastName last name of user
-     * @param email email id of user
-     * @param langKey language key
+     * @param lastName  last name of user
+     * @param email     email id of user
+     * @param langKey   language key
      */
     public void updateUser(String firstName, String lastName, String email, String langKey) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
@@ -197,7 +213,7 @@ public class UserService {
         });
     }
 
-    @Transactional(readOnly = true)    
+    @Transactional(readOnly = true)
     public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
         return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
     }
