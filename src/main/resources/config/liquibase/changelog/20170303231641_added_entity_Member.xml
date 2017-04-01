@@ -48,7 +48,9 @@
             <column name="show_info" type="bit">
                 <constraints nullable="true" />
             </column>
-            <column name="address_id" type="bigint">
+            <column name="user_id" type="bigint">
+                <constraints unique="true" nullable="true" />
+            </column>            <column name="address_id" type="bigint">
                 <constraints unique="true" nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->

@@ -31,6 +31,8 @@ public class MemberDTO implements Serializable {
 
     private Boolean showInfo;
 
+    private Long userId;
+
     private Long addressId;
 
     public Long getId() {
@@ -89,6 +91,14 @@ public class MemberDTO implements Serializable {
 
     public void setShowInfo(Boolean showInfo) {
         this.showInfo = showInfo;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getAddressId() {

@@ -8,6 +8,7 @@ import { EventManager, AlertService, JhiLanguageService, DataUtils } from 'ng-jh
 import { MemberScm } from './member-scm.model';
 import { MemberScmPopupService } from './member-scm-popup.service';
 import { MemberScmService } from './member-scm.service';
+import { User, UserService } from '../../shared';
 import { AddressScm, AddressScmService } from '../address';
 
 @Component({
@@ -20,6 +21,8 @@ export class MemberScmDialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
 
+    users: User[];
+
     addresses: AddressScm[];
     constructor(
         public activeModal: NgbActiveModal,
@@ -27,6 +30,7 @@ export class MemberScmDialogComponent implements OnInit {
         private dataUtils: DataUtils,
         private alertService: AlertService,
         private memberService: MemberScmService,
+        private userService: UserService,
         private addressService: AddressScmService,
         private eventManager: EventManager
     ) {
@@ -36,6 +40,8 @@ export class MemberScmDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        this.userService.query().subscribe(
+            (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
         this.addressService.query({filter: 'member-is-null'}).subscribe((res: Response) => {
             if (!this.member.addressId) {
                 this.addresses = res.json();
@@ -96,6 +102,10 @@ export class MemberScmDialogComponent implements OnInit {
 
     private onError (error) {
         this.alertService.error(error.message, null, null);
+    }
+
+    trackUserById(index: number, item: User) {
+        return item.id;
     }
 
     trackAddressById(index: number, item: AddressScm) {

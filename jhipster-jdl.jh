@@ -40,6 +40,7 @@ entity Team {
 }
 
 relationship OneToOne {
+	Member{user} to User,
 	Member{address} to Address,
 	Location{address} to Address
 }

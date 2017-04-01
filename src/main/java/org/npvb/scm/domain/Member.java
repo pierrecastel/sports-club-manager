@@ -49,6 +49,10 @@ public class Member implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
+    private User user;
+
+    @OneToOne
+    @JoinColumn(unique = true)
     private Address address;
 
     public Long getId() {
@@ -148,6 +152,19 @@ public class Member implements Serializable {
 
     public void setShowInfo(Boolean showInfo) {
         this.showInfo = showInfo;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Member user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Address getAddress() {

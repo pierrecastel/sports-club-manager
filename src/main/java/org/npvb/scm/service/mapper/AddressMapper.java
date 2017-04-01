@@ -26,7 +26,7 @@ public interface AddressMapper {
      * @param id id of the entity
      * @return the entity instance
      */
-
+     
     default Address addressFromId(Long id) {
         if (id == null) {
             return null;
@@ -35,6 +35,6 @@ public interface AddressMapper {
         address.setId(id);
         return address;
     }
-
+    
 
 }
