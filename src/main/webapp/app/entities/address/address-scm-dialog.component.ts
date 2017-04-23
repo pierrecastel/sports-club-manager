@@ -32,35 +32,40 @@ export class AddressScmDialogComponent implements OnInit {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.address.id !== undefined) {
             this.addressService.update(this.address)
                 .subscribe((res: AddressScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.addressService.create(this.address)
                 .subscribe((res: AddressScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
-    private onSaveSuccess (result: AddressScm) {
+    private onSaveSuccess(result: AddressScm) {
         this.eventManager.broadcast({ name: 'addressListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
@@ -74,13 +79,13 @@ export class AddressScmPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private addressPopupService: AddressScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.addressPopupService
                     .open(AddressScmDialogComponent, params['id']);
@@ -88,7 +93,6 @@ export class AddressScmPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.addressPopupService
                     .open(AddressScmDialogComponent);
             }
-
         });
     }
 

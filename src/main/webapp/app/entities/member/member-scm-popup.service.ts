@@ -6,21 +6,21 @@ import { MemberScmService } from './member-scm.service';
 @Injectable()
 export class MemberScmPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private memberService: MemberScmService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.memberService.find(id).subscribe(member => {
+            this.memberService.find(id).subscribe((member) => {
                 if (member.birthDate) {
                     member.birthDate = {
                         year: member.birthDate.getFullYear(),
@@ -36,9 +36,9 @@ export class MemberScmPopupService {
     }
 
     memberModalRef(component: Component, member: MemberScm): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.member = member;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

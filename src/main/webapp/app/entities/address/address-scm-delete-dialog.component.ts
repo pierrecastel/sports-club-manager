@@ -25,12 +25,12 @@ export class AddressScmDeleteDialogComponent {
         this.jhiLanguageService.setLocations(['address']);
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.addressService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.addressService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'addressListModification',
                 content: 'Deleted an address'
@@ -49,13 +49,13 @@ export class AddressScmDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private addressPopupService: AddressScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.addressPopupService
                 .open(AddressScmDeleteDialogComponent, params['id']);
         });

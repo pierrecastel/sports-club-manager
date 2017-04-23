@@ -25,12 +25,12 @@ export class MemberScmDeleteDialogComponent {
         this.jhiLanguageService.setLocations(['member']);
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.memberService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.memberService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'memberListModification',
                 content: 'Deleted an member'
@@ -49,13 +49,13 @@ export class MemberScmDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private memberPopupService: MemberScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.memberPopupService
                 .open(MemberScmDeleteDialogComponent, params['id']);
         });

@@ -48,18 +48,14 @@ locations: LocationScm[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: LocationScm) {
+    trackId(index: number, item: LocationScm) {
         return item.id;
     }
-
-
-
     registerChangeInLocations() {
         this.eventSubscriber = this.eventManager.subscribe('locationListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

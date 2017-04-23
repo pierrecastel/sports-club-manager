@@ -11,7 +11,6 @@ import { TeamScmDeletePopupComponent } from './team-scm-delete-dialog.component'
 
 import { Principal } from '../../shared';
 
-
 export const teamRoute: Routes = [
   {
     path: 'team-scm',
@@ -19,14 +18,16 @@ export const teamRoute: Routes = [
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.team.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }, {
     path: 'team-scm/:id',
     component: TeamScmDetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.team.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }
 ];
 
@@ -38,6 +39,7 @@ export const teamPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.team.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -47,6 +49,7 @@ export const teamPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.team.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -56,6 +59,7 @@ export const teamPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.team.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   }
 ];

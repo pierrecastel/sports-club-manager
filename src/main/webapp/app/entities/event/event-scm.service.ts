@@ -12,7 +12,7 @@ export class EventScmService {
     constructor(private http: Http, private dateUtils: DateUtils) { }
 
     create(event: EventScm): Observable<EventScm> {
-        let copy: EventScm = Object.assign({}, event);
+        const copy: EventScm = Object.assign({}, event);
         copy.date = this.dateUtils
             .convertLocalDateToServer(event.date);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
@@ -21,7 +21,7 @@ export class EventScmService {
     }
 
     update(event: EventScm): Observable<EventScm> {
-        let copy: EventScm = Object.assign({}, event);
+        const copy: EventScm = Object.assign({}, event);
         copy.date = this.dateUtils
             .convertLocalDateToServer(event.date);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
@@ -31,7 +31,7 @@ export class EventScmService {
 
     find(id: number): Observable<EventScm> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
-            let jsonResponse = res.json();
+            const jsonResponse = res.json();
             jsonResponse.date = this.dateUtils
                 .convertLocalDateFromServer(jsonResponse.date);
             return jsonResponse;
@@ -39,7 +39,7 @@ export class EventScmService {
     }
 
     query(req?: any): Observable<Response> {
-        let options = this.createRequestOption(req);
+        const options = this.createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
             .map((res: any) => this.convertResponse(res))
         ;
@@ -49,9 +49,8 @@ export class EventScmService {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
 
-
     private convertResponse(res: any): any {
-        let jsonResponse = res.json();
+        const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {
             jsonResponse[i].date = this.dateUtils
                 .convertLocalDateFromServer(jsonResponse[i].date);
@@ -61,9 +60,9 @@ export class EventScmService {
     }
 
     private createRequestOption(req?: any): BaseRequestOptions {
-        let options: BaseRequestOptions = new BaseRequestOptions();
+        const options: BaseRequestOptions = new BaseRequestOptions();
         if (req) {
-            let params: URLSearchParams = new URLSearchParams();
+            const params: URLSearchParams = new URLSearchParams();
             params.set('page', req.page);
             params.set('size', req.size);
             if (req.sort) {

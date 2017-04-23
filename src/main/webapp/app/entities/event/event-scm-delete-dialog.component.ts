@@ -25,12 +25,12 @@ export class EventScmDeleteDialogComponent {
         this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.eventService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.eventService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'eventListModification',
                 content: 'Deleted an event'
@@ -49,13 +49,13 @@ export class EventScmDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private eventPopupService: EventScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.eventPopupService
                 .open(EventScmDeleteDialogComponent, params['id']);
         });

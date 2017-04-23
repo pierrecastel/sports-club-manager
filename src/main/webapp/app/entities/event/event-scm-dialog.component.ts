@@ -27,7 +27,7 @@ export class EventScmDialogComponent implements OnInit {
     locations: LocationScm[];
 
     users: User[];
-    constructor(
+        constructor(
         public activeModal: NgbActiveModal,
         private jhiLanguageService: JhiLanguageService,
         private alertService: AlertService,
@@ -50,35 +50,40 @@ export class EventScmDialogComponent implements OnInit {
         this.userService.query().subscribe(
             (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.event.id !== undefined) {
             this.eventService.update(this.event)
                 .subscribe((res: EventScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.eventService.create(this.event)
                 .subscribe((res: EventScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
-    private onSaveSuccess (result: EventScm) {
+    private onSaveSuccess(result: EventScm) {
         this.eventManager.broadcast({ name: 'eventListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -115,13 +120,13 @@ export class EventScmPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private eventPopupService: EventScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.eventPopupService
                     .open(EventScmDialogComponent, params['id']);
@@ -129,7 +134,6 @@ export class EventScmPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.eventPopupService
                     .open(EventScmDialogComponent);
             }
-
         });
     }
 

@@ -6,21 +6,21 @@ import { AddressScmService } from './address-scm.service';
 @Injectable()
 export class AddressScmPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private addressService: AddressScmService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.addressService.find(id).subscribe(address => {
+            this.addressService.find(id).subscribe((address) => {
                 this.addressModalRef(component, address);
             });
         } else {
@@ -29,9 +29,9 @@ export class AddressScmPopupService {
     }
 
     addressModalRef(component: Component, address: AddressScm): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.address = address;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

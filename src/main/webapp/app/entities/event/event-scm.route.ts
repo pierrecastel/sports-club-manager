@@ -17,8 +17,8 @@ export class EventScmResolvePagingParams implements Resolve<any> {
   constructor(private paginationUtil: PaginationUtil) {}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      let page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-      let sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
+      const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
+      const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
       return {
           page: this.paginationUtil.parsePage(page),
           predicate: this.paginationUtil.parsePredicate(sort),
@@ -37,14 +37,16 @@ export const eventRoute: Routes = [
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.event.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }, {
     path: 'event-scm/:id',
     component: EventScmDetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.event.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }
 ];
 
@@ -56,6 +58,7 @@ export const eventPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.event.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -65,6 +68,7 @@ export const eventPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.event.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -74,6 +78,7 @@ export const eventPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.event.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   }
 ];

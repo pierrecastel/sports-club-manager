@@ -149,7 +149,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Joe",                  // firstName
             "Shmoe",                // lastName
-            "joe@example.com",              // e-mail
+            "joe@example.com",      // email
             null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
@@ -179,7 +179,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Funky",                // firstName
             "One",                  // lastName
-            "funky@example.com",    // e-mail
+            "funky@example.com",    // email
             null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
@@ -209,7 +209,7 @@ public class AccountResourceIntTest {
             "password",         // password
             "Bob",              // firstName
             "Green",            // lastName
-            "invalid",          // e-mail <-- invalid
+            "invalid",          // email <-- invalid
             null,                 // pnoneNumber
             true,               // activated
             "http://placehold.it/50x50", //imageUrl
@@ -239,7 +239,7 @@ public class AccountResourceIntTest {
             "123",              // password with only 3 digits
             "Bob",              // firstName
             "Green",            // lastName
-            "bob@example.com",  // e-mail
+            "bob@example.com",  // email
             null,                 // pnoneNumber
             true,               // activated
             "http://placehold.it/50x50", //imageUrl
@@ -270,7 +270,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Alice",                // firstName
             "Something",            // lastName
-            "alice@example.com",    // e-mail
+            "alice@example.com",    // email
             null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
@@ -314,7 +314,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "John",                 // firstName
             "Doe",                  // lastName
-            "john@example.com",     // e-mail
+            "john@example.com",     // email
             null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
@@ -325,7 +325,7 @@ public class AccountResourceIntTest {
             null,                   // lastModifiedDate
             new HashSet<>(Arrays.asList(AuthoritiesConstants.USER)));
 
-        // Duplicate e-mail, different login
+        // Duplicate email, different login
         ManagedUserVM duplicatedUser = new ManagedUserVM(validUser.getId(), "johnjr", validUser.getPassword(), validUser.getLogin(), validUser.getLastName(),
             validUser.getEmail(), validUser.getPhoneNumber(), true, validUser.getImageUrl(), validUser.getLangKey(), validUser.getCreatedBy(), validUser.getCreatedDate(), validUser.getLastModifiedBy(), validUser.getLastModifiedDate(), validUser.getAuthorities());
 
@@ -336,7 +336,7 @@ public class AccountResourceIntTest {
                 .content(TestUtil.convertObjectToJsonBytes(validUser)))
             .andExpect(status().isCreated());
 
-        // Duplicate e-mail
+        // Duplicate email
         restMvc.perform(
             post("/api/register")
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -356,7 +356,7 @@ public class AccountResourceIntTest {
             "password",             // password
             "Bad",                  // firstName
             "Guy",                  // lastName
-            "badguy@example.com",   // e-mail
+            "badguy@example.com",   // email
             null,                 // pnoneNumber
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
@@ -387,7 +387,7 @@ public class AccountResourceIntTest {
             "funky-log!n",          // login <-- invalid
             "Funky",                // firstName
             "One",                  // lastName
-            "funky@example.com",    // e-mail
+            "funky@example.com",    // email
             true,                   // activated
             "http://placehold.it/50x50", //imageUrl
             "fr",                   // langKey

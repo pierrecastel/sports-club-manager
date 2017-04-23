@@ -11,7 +11,6 @@ import { AddressScmDeletePopupComponent } from './address-scm-delete-dialog.comp
 
 import { Principal } from '../../shared';
 
-
 export const addressRoute: Routes = [
   {
     path: 'address-scm',
@@ -19,14 +18,16 @@ export const addressRoute: Routes = [
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.address.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }, {
     path: 'address-scm/:id',
     component: AddressScmDetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.address.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }
 ];
 
@@ -38,6 +39,7 @@ export const addressPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.address.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -47,6 +49,7 @@ export const addressPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.address.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -56,6 +59,7 @@ export const addressPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.address.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   }
 ];

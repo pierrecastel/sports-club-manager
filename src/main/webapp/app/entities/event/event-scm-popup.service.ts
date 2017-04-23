@@ -6,21 +6,21 @@ import { EventScmService } from './event-scm.service';
 @Injectable()
 export class EventScmPopupService {
     private isOpen = false;
-    constructor (
+    constructor(
         private modalService: NgbModal,
         private router: Router,
         private eventService: EventScmService
 
     ) {}
 
-    open (component: Component, id?: number | any): NgbModalRef {
+    open(component: Component, id?: number | any): NgbModalRef {
         if (this.isOpen) {
             return;
         }
         this.isOpen = true;
 
         if (id) {
-            this.eventService.find(id).subscribe(event => {
+            this.eventService.find(id).subscribe((event) => {
                 if (event.date) {
                     event.date = {
                         year: event.date.getFullYear(),
@@ -36,9 +36,9 @@ export class EventScmPopupService {
     }
 
     eventModalRef(component: Component, event: EventScm): NgbModalRef {
-        let modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
+        const modalRef = this.modalService.open(component, { size: 'lg', backdrop: 'static'});
         modalRef.componentInstance.event = event;
-        modalRef.result.then(result => {
+        modalRef.result.then((result) => {
             this.router.navigate([{ outlets: { popup: null }}], { replaceUrl: true });
             this.isOpen = false;
         }, (reason) => {

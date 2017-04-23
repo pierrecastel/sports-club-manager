@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager , JhiLanguageService  } from 'ng-jhipster';
+
 import { AddressScm } from './address-scm.model';
 import { AddressScmService } from './address-scm.service';
 
@@ -12,8 +14,10 @@ export class AddressScmDetailComponent implements OnInit, OnDestroy {
 
     address: AddressScm;
     private subscription: any;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private jhiLanguageService: JhiLanguageService,
         private addressService: AddressScmService,
         private route: ActivatedRoute
@@ -22,13 +26,14 @@ export class AddressScmDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInAddresses();
     }
 
-    load (id) {
-        this.addressService.find(id).subscribe(address => {
+    load(id) {
+        this.addressService.find(id).subscribe((address) => {
             this.address = address;
         });
     }
@@ -38,6 +43,10 @@ export class AddressScmDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInAddresses() {
+        this.eventSubscriber = this.eventManager.subscribe('addressListModification', (response) => this.load(this.address.id));
+    }
 }

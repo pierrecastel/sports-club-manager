@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JhiLanguageService, DataUtils } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager , JhiLanguageService , DataUtils } from 'ng-jhipster';
+
 import { MemberScm } from './member-scm.model';
 import { MemberScmService } from './member-scm.service';
 
@@ -12,8 +14,10 @@ export class MemberScmDetailComponent implements OnInit, OnDestroy {
 
     member: MemberScm;
     private subscription: any;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private jhiLanguageService: JhiLanguageService,
         private dataUtils: DataUtils,
         private memberService: MemberScmService,
@@ -23,13 +27,14 @@ export class MemberScmDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInMembers();
     }
 
-    load (id) {
-        this.memberService.find(id).subscribe(member => {
+    load(id) {
+        this.memberService.find(id).subscribe((member) => {
             this.member = member;
         });
     }
@@ -46,6 +51,10 @@ export class MemberScmDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInMembers() {
+        this.eventSubscriber = this.eventManager.subscribe('memberListModification', (response) => this.load(this.member.id));
+    }
 }

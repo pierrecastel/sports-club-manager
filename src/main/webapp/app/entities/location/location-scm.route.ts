@@ -11,7 +11,6 @@ import { LocationScmDeletePopupComponent } from './location-scm-delete-dialog.co
 
 import { Principal } from '../../shared';
 
-
 export const locationRoute: Routes = [
   {
     path: 'location-scm',
@@ -19,14 +18,16 @@ export const locationRoute: Routes = [
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.location.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }, {
     path: 'location-scm/:id',
     component: LocationScmDetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.location.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }
 ];
 
@@ -38,6 +39,7 @@ export const locationPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.location.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -47,6 +49,7 @@ export const locationPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.location.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -56,6 +59,7 @@ export const locationPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.location.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   }
 ];

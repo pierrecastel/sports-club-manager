@@ -11,7 +11,6 @@ import { MemberScmDeletePopupComponent } from './member-scm-delete-dialog.compon
 
 import { Principal } from '../../shared';
 
-
 export const memberRoute: Routes = [
   {
     path: 'member-scm',
@@ -19,14 +18,16 @@ export const memberRoute: Routes = [
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.member.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }, {
     path: 'member-scm/:id',
     component: MemberScmDetailComponent,
     data: {
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.member.home.title'
-    }
+    },
+    canActivate: [UserRouteAccessService]
   }
 ];
 
@@ -38,6 +39,7 @@ export const memberPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.member.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -47,6 +49,7 @@ export const memberPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.member.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   },
   {
@@ -56,6 +59,7 @@ export const memberPopupRoute: Routes = [
         authorities: ['ROLE_USER'],
         pageTitle: 'scmApp.member.home.title'
     },
+    canActivate: [UserRouteAccessService],
     outlet: 'popup'
   }
 ];

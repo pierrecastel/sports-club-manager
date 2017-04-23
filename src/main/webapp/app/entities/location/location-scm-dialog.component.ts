@@ -45,35 +45,40 @@ export class LocationScmDialogComponent implements OnInit {
             }
         }, (res: Response) => this.onError(res.json()));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.location.id !== undefined) {
             this.locationService.update(this.location)
                 .subscribe((res: LocationScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.locationService.create(this.location)
                 .subscribe((res: LocationScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
-    private onSaveSuccess (result: LocationScm) {
+    private onSaveSuccess(result: LocationScm) {
         this.eventManager.broadcast({ name: 'locationListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -91,13 +96,13 @@ export class LocationScmPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private locationPopupService: LocationScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.locationPopupService
                     .open(LocationScmDialogComponent, params['id']);
@@ -105,7 +110,6 @@ export class LocationScmPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.locationPopupService
                     .open(LocationScmDialogComponent);
             }
-
         });
     }
 
