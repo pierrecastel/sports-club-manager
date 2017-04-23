@@ -25,12 +25,12 @@ export class LocationScmDeleteDialogComponent {
         this.jhiLanguageService.setLocations(['location']);
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.locationService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.locationService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'locationListModification',
                 content: 'Deleted an location'
@@ -49,13 +49,13 @@ export class LocationScmDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private locationPopupService: LocationScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.locationPopupService
                 .open(LocationScmDeleteDialogComponent, params['id']);
         });

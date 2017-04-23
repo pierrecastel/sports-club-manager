@@ -2,7 +2,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { ScmSharedModule } from '../../shared';
-
 import {
     LocationScmService,
     LocationScmPopupService,
@@ -16,7 +15,7 @@ import {
     locationPopupRoute,
 } from './';
 
-let ENTITY_STATES = [
+const ENTITY_STATES = [
     ...locationRoute,
     ...locationPopupRoute,
 ];

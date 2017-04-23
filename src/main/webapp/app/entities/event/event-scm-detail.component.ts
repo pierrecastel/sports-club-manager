@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager , JhiLanguageService  } from 'ng-jhipster';
+
 import { EventScm } from './event-scm.model';
 import { EventScmService } from './event-scm.service';
 
@@ -12,8 +14,10 @@ export class EventScmDetailComponent implements OnInit, OnDestroy {
 
     event: EventScm;
     private subscription: any;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private jhiLanguageService: JhiLanguageService,
         private eventService: EventScmService,
         private route: ActivatedRoute
@@ -22,13 +26,14 @@ export class EventScmDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInEvents();
     }
 
-    load (id) {
-        this.eventService.find(id).subscribe(event => {
+    load(id) {
+        this.eventService.find(id).subscribe((event) => {
             this.event = event;
         });
     }
@@ -38,6 +43,10 @@ export class EventScmDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInEvents() {
+        this.eventSubscriber = this.eventManager.subscribe('eventListModification', (response) => this.load(this.event.id));
+    }
 }

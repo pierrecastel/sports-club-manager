@@ -5,7 +5,6 @@ import { ScmSharedModule } from '../shared';
 
 import { HOME_ROUTE, HomeComponent } from './';
 
-
 @NgModule({
     imports: [
         ScmSharedModule,

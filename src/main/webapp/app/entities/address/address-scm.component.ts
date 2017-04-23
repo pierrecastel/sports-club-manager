@@ -48,18 +48,14 @@ addresses: AddressScm[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: AddressScm) {
+    trackId(index: number, item: AddressScm) {
         return item.id;
     }
-
-
-
     registerChangeInAddresses() {
         this.eventSubscriber = this.eventManager.subscribe('addressListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

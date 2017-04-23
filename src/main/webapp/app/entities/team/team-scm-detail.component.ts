@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager , JhiLanguageService  } from 'ng-jhipster';
+
 import { TeamScm } from './team-scm.model';
 import { TeamScmService } from './team-scm.service';
 
@@ -12,8 +14,10 @@ export class TeamScmDetailComponent implements OnInit, OnDestroy {
 
     team: TeamScm;
     private subscription: any;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private jhiLanguageService: JhiLanguageService,
         private teamService: TeamScmService,
         private route: ActivatedRoute
@@ -22,13 +26,14 @@ export class TeamScmDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInTeams();
     }
 
-    load (id) {
-        this.teamService.find(id).subscribe(team => {
+    load(id) {
+        this.teamService.find(id).subscribe((team) => {
             this.team = team;
         });
     }
@@ -38,6 +43,10 @@ export class TeamScmDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInTeams() {
+        this.eventSubscriber = this.eventManager.subscribe('teamListModification', (response) => this.load(this.team.id));
+    }
 }

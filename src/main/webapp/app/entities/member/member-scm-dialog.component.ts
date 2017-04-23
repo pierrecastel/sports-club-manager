@@ -21,7 +21,7 @@ export class MemberScmDialogComponent implements OnInit {
     isSaving: boolean;
 
     addresses: AddressScm[];
-    constructor(
+        constructor(
         public activeModal: NgbActiveModal,
         private jhiLanguageService: JhiLanguageService,
         private dataUtils: DataUtils,
@@ -54,47 +54,52 @@ export class MemberScmDialogComponent implements OnInit {
         return this.dataUtils.openFile(contentType, field);
     }
 
-    setFileData($event, member, field, isImage) {
-        if ($event.target.files && $event.target.files[0]) {
-            let $file = $event.target.files[0];
-            if (isImage && !/^image\//.test($file.type)) {
+    setFileData(event, member, field, isImage) {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            if (isImage && !/^image\//.test(file.type)) {
                 return;
             }
-            this.dataUtils.toBase64($file, (base64Data) => {
+            this.dataUtils.toBase64(file, (base64Data) => {
                 member[field] = base64Data;
-                member[`${field}ContentType`] = $file.type;
+                member[`${field}ContentType`] = file.type;
             });
         }
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.member.id !== undefined) {
             this.memberService.update(this.member)
                 .subscribe((res: MemberScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.memberService.create(this.member)
                 .subscribe((res: MemberScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
-    private onSaveSuccess (result: MemberScm) {
+    private onSaveSuccess(result: MemberScm) {
         this.eventManager.broadcast({ name: 'memberListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -112,13 +117,13 @@ export class MemberScmPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private memberPopupService: MemberScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.memberPopupService
                     .open(MemberScmDialogComponent, params['id']);
@@ -126,7 +131,6 @@ export class MemberScmPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.memberPopupService
                     .open(MemberScmDialogComponent);
             }
-
         });
     }
 

@@ -36,11 +36,11 @@ public class Event implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
+    @Column(name = "jhi_type", nullable = false)
     private EventType type;
 
     @NotNull
-    @Column(name = "date", nullable = false)
+    @Column(name = "jhi_date", nullable = false)
     private LocalDate date;
 
     @NotNull
@@ -55,7 +55,7 @@ public class Event implements Serializable {
     private Boolean isHome;
 
     @Size(max = 1000)
-    @Column(name = "comment", length = 1000)
+    @Column(name = "jhi_comment", length = 1000)
     private String comment;
 
     @ManyToOne

@@ -25,12 +25,12 @@ export class TeamScmDeleteDialogComponent {
         this.jhiLanguageService.setLocations(['team']);
     }
 
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    confirmDelete (id: number) {
-        this.teamService.delete(id).subscribe(response => {
+    confirmDelete(id: number) {
+        this.teamService.delete(id).subscribe((response) => {
             this.eventManager.broadcast({
                 name: 'teamListModification',
                 content: 'Deleted an team'
@@ -49,13 +49,13 @@ export class TeamScmDeletePopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private teamPopupService: TeamScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             this.modalRef = this.teamPopupService
                 .open(TeamScmDeleteDialogComponent, params['id']);
         });

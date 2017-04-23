@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 
 import { ScmSharedModule } from '../../shared';
 import { ScmAdminModule } from '../../admin/admin.module';
-
 import {
     EventScmService,
     EventScmPopupService,
@@ -18,7 +17,7 @@ import {
     EventScmResolvePagingParams,
 } from './';
 
-let ENTITY_STATES = [
+const ENTITY_STATES = [
     ...eventRoute,
     ...eventPopupRoute,
 ];

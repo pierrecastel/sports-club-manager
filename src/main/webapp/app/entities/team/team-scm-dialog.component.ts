@@ -38,35 +38,40 @@ export class TeamScmDialogComponent implements OnInit {
         this.userService.query().subscribe(
             (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
     }
-    clear () {
+    clear() {
         this.activeModal.dismiss('cancel');
     }
 
-    save () {
+    save() {
         this.isSaving = true;
         if (this.team.id !== undefined) {
             this.teamService.update(this.team)
                 .subscribe((res: TeamScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         } else {
             this.teamService.create(this.team)
                 .subscribe((res: TeamScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res.json()));
+                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
         }
     }
 
-    private onSaveSuccess (result: TeamScm) {
+    private onSaveSuccess(result: TeamScm) {
         this.eventManager.broadcast({ name: 'teamListModification', content: 'OK'});
         this.isSaving = false;
         this.activeModal.dismiss(result);
     }
 
-    private onSaveError (error) {
+    private onSaveError(error) {
+        try {
+            error.json();
+        } catch (exception) {
+            error.message = error.text();
+        }
         this.isSaving = false;
         this.onError(error);
     }
 
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 
@@ -95,13 +100,13 @@ export class TeamScmPopupComponent implements OnInit, OnDestroy {
     modalRef: NgbModalRef;
     routeSub: any;
 
-    constructor (
+    constructor(
         private route: ActivatedRoute,
         private teamPopupService: TeamScmPopupService
     ) {}
 
     ngOnInit() {
-        this.routeSub = this.route.params.subscribe(params => {
+        this.routeSub = this.route.params.subscribe((params) => {
             if ( params['id'] ) {
                 this.modalRef = this.teamPopupService
                     .open(TeamScmDialogComponent, params['id']);
@@ -109,7 +114,6 @@ export class TeamScmPopupComponent implements OnInit, OnDestroy {
                 this.modalRef = this.teamPopupService
                     .open(TeamScmDialogComponent);
             }
-
         });
     }
 

@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { JhiLanguageService } from 'ng-jhipster';
+import { Subscription } from 'rxjs/Rx';
+import { EventManager , JhiLanguageService  } from 'ng-jhipster';
+
 import { LocationScm } from './location-scm.model';
 import { LocationScmService } from './location-scm.service';
 
@@ -12,8 +14,10 @@ export class LocationScmDetailComponent implements OnInit, OnDestroy {
 
     location: LocationScm;
     private subscription: any;
+    private eventSubscriber: Subscription;
 
     constructor(
+        private eventManager: EventManager,
         private jhiLanguageService: JhiLanguageService,
         private locationService: LocationScmService,
         private route: ActivatedRoute
@@ -22,13 +26,14 @@ export class LocationScmDetailComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.subscription = this.route.params.subscribe(params => {
+        this.subscription = this.route.params.subscribe((params) => {
             this.load(params['id']);
         });
+        this.registerChangeInLocations();
     }
 
-    load (id) {
-        this.locationService.find(id).subscribe(location => {
+    load(id) {
+        this.locationService.find(id).subscribe((location) => {
             this.location = location;
         });
     }
@@ -38,6 +43,10 @@ export class LocationScmDetailComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.subscription.unsubscribe();
+        this.eventManager.destroy(this.eventSubscriber);
     }
 
+    registerChangeInLocations() {
+        this.eventSubscriber = this.eventManager.subscribe('locationListModification', (response) => this.load(this.location.id));
+    }
 }

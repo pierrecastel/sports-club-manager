@@ -49,11 +49,9 @@ members: MemberScm[];
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId (index: number, item: MemberScm) {
+    trackId(index: number, item: MemberScm) {
         return item.id;
     }
-
-
 
     byteSize(field) {
         return this.dataUtils.byteSize(field);
@@ -66,8 +64,7 @@ members: MemberScm[];
         this.eventSubscriber = this.eventManager.subscribe('memberListModification', (response) => this.loadAll());
     }
 
-
-    private onError (error) {
+    private onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }
