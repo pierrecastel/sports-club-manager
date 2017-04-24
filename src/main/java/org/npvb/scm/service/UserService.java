@@ -159,7 +159,7 @@ public class UserService {
      * @param lastName  last name of user
      * @param email     email id of user
      * @param langKey   language key
-     * @param imageUrl image URL of user
+     * @param imageUrl  image URL of user
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).ifPresent(user -> {
