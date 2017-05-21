@@ -52,6 +52,10 @@ public class Member implements Serializable {
 
     @OneToOne
     @JoinColumn(unique = true)
+    private User user;
+
+    @OneToOne
+    @JoinColumn(unique = true)
     private Address address;
 
     public Long getId() {
