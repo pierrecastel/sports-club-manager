@@ -7,6 +7,7 @@ export class MemberScm {
         public birthDate?: any,
         public job?: string,
         public showInfo?: boolean,
+        public userId?: number,
         public addressId?: number,
     ) {
         this.showInfo = false;

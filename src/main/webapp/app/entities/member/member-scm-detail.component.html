@@ -33,6 +33,10 @@
         <dd>
             <span>{{member.showInfo}}</span>
         </dd>
+        <dt><span jhiTranslate="scmApp.member.user">User</span></dt>
+        <dd>
+            {{member.userId}}
+        </dd>
         <dt><span jhiTranslate="scmApp.member.address">Address</span></dt>
         <dd>
             <div *ngIf="member.addressId">

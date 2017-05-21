@@ -9,6 +9,7 @@ import { EventManager, AlertService, DataUtils } from 'ng-jhipster';
 import { MemberScm } from './member-scm.model';
 import { MemberScmPopupService } from './member-scm-popup.service';
 import { MemberScmService } from './member-scm.service';
+import { User, UserService } from '../../shared';
 import { AddressScm, AddressScmService } from '../address';
 import { ResponseWrapper } from '../../shared';
 
@@ -22,6 +23,8 @@ export class MemberScmDialogComponent implements OnInit {
     authorities: any[];
     isSaving: boolean;
 
+    users: User[];
+
     addresses: AddressScm[];
     birthDateDp: any;
 
@@ -30,6 +33,7 @@ export class MemberScmDialogComponent implements OnInit {
         private dataUtils: DataUtils,
         private alertService: AlertService,
         private memberService: MemberScmService,
+        private userService: UserService,
         private addressService: AddressScmService,
         private eventManager: EventManager
     ) {
@@ -38,6 +42,8 @@ export class MemberScmDialogComponent implements OnInit {
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
         this.addressService
             .query({filter: 'member-is-null'})
             .subscribe((res: ResponseWrapper) => {
@@ -110,6 +116,10 @@ export class MemberScmDialogComponent implements OnInit {
 
     private onError(error) {
         this.alertService.error(error.message, null, null);
+    }
+
+    trackUserById(index: number, item: User) {
+        return item.id;
     }
 
     trackAddressById(index: number, item: AddressScm) {

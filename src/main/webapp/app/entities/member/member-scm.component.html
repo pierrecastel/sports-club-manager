@@ -23,6 +23,7 @@
             <th><span jhiTranslate="scmApp.member.birthDate">Birth Date</span></th>
             <th><span jhiTranslate="scmApp.member.job">Job</span></th>
             <th><span jhiTranslate="scmApp.member.showInfo">Show Info</span></th>
+            <th><span jhiTranslate="scmApp.member.user">User</span></th>
             <th><span jhiTranslate="scmApp.member.address">Address</span></th>
             <th></th>
             </tr>
@@ -41,6 +42,9 @@
                 <td>{{member.birthDate | date:'mediumDate'}}</td>
                 <td>{{member.job}}</td>
                 <td>{{member.showInfo}}</td>
+                <td>
+                    {{member.userId}}
+                </td>
                 <td>
                     <div *ngIf="member.addressId">
                         <a [routerLink]="['../address-scm', member.addressId  ]" >{{member.addressId}}</a>

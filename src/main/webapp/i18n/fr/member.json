@@ -21,6 +21,7 @@
             "birthDate": "Birth Date",
             "job": "Job",
             "showInfo": "Show Info",
+            "user": "User",
             "address": "Address"
         }
     }
