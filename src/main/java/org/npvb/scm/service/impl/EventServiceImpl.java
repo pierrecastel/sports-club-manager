@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Event.
@@ -43,9 +41,9 @@ public class EventServiceImpl implements EventService{
     @Override
     public EventDTO save(EventDTO eventDTO) {
         log.debug("Request to save Event : {}", eventDTO);
-        Event event = eventMapper.eventDTOToEvent(eventDTO);
+        Event event = eventMapper.toEntity(eventDTO);
         event = eventRepository.save(event);
-        EventDTO result = eventMapper.eventToEventDTO(event);
+        EventDTO result = eventMapper.toDto(event);
         return result;
     }
 
@@ -60,7 +58,7 @@ public class EventServiceImpl implements EventService{
     public Page<EventDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Events");
         Page<Event> result = eventRepository.findAll(pageable);
-        return result.map(event -> eventMapper.eventToEventDTO(event));
+        return result.map(event -> eventMapper.toDto(event));
     }
 
     /**
@@ -74,7 +72,7 @@ public class EventServiceImpl implements EventService{
     public EventDTO findOne(Long id) {
         log.debug("Request to get Event : {}", id);
         Event event = eventRepository.findOneWithEagerRelationships(id);
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
         return eventDTO;
     }
 

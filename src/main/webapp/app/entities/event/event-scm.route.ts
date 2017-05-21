@@ -14,71 +14,71 @@ import { Principal } from '../../shared';
 @Injectable()
 export class EventScmResolvePagingParams implements Resolve<any> {
 
-  constructor(private paginationUtil: PaginationUtil) {}
+    constructor(private paginationUtil: PaginationUtil) {}
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
-      const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
-      return {
-          page: this.paginationUtil.parsePage(page),
-          predicate: this.paginationUtil.parsePredicate(sort),
-          ascending: this.paginationUtil.parseAscending(sort)
-    };
-  }
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        const page = route.queryParams['page'] ? route.queryParams['page'] : '1';
+        const sort = route.queryParams['sort'] ? route.queryParams['sort'] : 'id,asc';
+        return {
+            page: this.paginationUtil.parsePage(page),
+            predicate: this.paginationUtil.parsePredicate(sort),
+            ascending: this.paginationUtil.parseAscending(sort)
+      };
+    }
 }
 
 export const eventRoute: Routes = [
-  {
-    path: 'event-scm',
-    component: EventScmComponent,
-    resolve: {
-      'pagingParams': EventScmResolvePagingParams
-    },
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.event.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }, {
-    path: 'event-scm/:id',
-    component: EventScmDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.event.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }
+    {
+        path: 'event-scm',
+        component: EventScmComponent,
+        resolve: {
+            'pagingParams': EventScmResolvePagingParams
+        },
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.event.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'event-scm/:id',
+        component: EventScmDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.event.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }
 ];
 
 export const eventPopupRoute: Routes = [
-  {
-    path: 'event-scm-new',
-    component: EventScmPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.event.home.title'
+    {
+        path: 'event-scm-new',
+        component: EventScmPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.event.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  },
-  {
-    path: 'event-scm/:id/edit',
-    component: EventScmPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.event.home.title'
+    {
+        path: 'event-scm/:id/edit',
+        component: EventScmPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.event.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  },
-  {
-    path: 'event-scm/:id/delete',
-    component: EventScmDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.event.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  }
+    {
+        path: 'event-scm/:id/delete',
+        component: EventScmDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.event.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

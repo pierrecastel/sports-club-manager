@@ -74,22 +74,22 @@ public class Location implements Serializable {
             return false;
         }
         Location location = (Location) o;
-        if (location.id == null || id == null) {
+        if (location.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, location.id);
+        return Objects.equals(getId(), location.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "Location{" +
-            "id=" + id +
-            ", title='" + title + "'" +
-            '}';
+            "id=" + getId() +
+            ", title='" + getTitle() + "'" +
+            "}";
     }
 }

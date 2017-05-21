@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { EventScm } from './event-scm.model';
 import { EventScmService } from './event-scm.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -31,7 +30,6 @@ currentAccount: any;
     reverse: any;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private eventService: EventScmService,
         private parseLinks: ParseLinks,
         private alertService: AlertService,
@@ -49,7 +47,6 @@ currentAccount: any;
             this.reverse = data['pagingParams'].ascending;
             this.predicate = data['pagingParams'].predicate;
         });
-        this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
     loadAll() {
@@ -57,8 +54,8 @@ currentAccount: any;
             page: this.page - 1,
             size: this.itemsPerPage,
             sort: this.sort()}).subscribe(
-            (res: Response) => this.onSuccess(res.json(), res.headers),
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     loadPage(page: number) {

@@ -127,7 +127,7 @@ public class MemberResourceIntTest {
         int databaseSizeBeforeCreate = memberRepository.findAll().size();
 
         // Create the Member
-        MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+        MemberDTO memberDTO = memberMapper.toDto(member);
         restMemberMockMvc.perform(post("/api/members")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(memberDTO)))
@@ -153,7 +153,7 @@ public class MemberResourceIntTest {
 
         // Create the Member with an existing ID
         member.setId(1L);
-        MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+        MemberDTO memberDTO = memberMapper.toDto(member);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restMemberMockMvc.perform(post("/api/members")
@@ -231,7 +231,7 @@ public class MemberResourceIntTest {
             .birthDate(UPDATED_BIRTH_DATE)
             .job(UPDATED_JOB)
             .showInfo(UPDATED_SHOW_INFO);
-        MemberDTO memberDTO = memberMapper.memberToMemberDTO(updatedMember);
+        MemberDTO memberDTO = memberMapper.toDto(updatedMember);
 
         restMemberMockMvc.perform(put("/api/members")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -257,7 +257,7 @@ public class MemberResourceIntTest {
         int databaseSizeBeforeUpdate = memberRepository.findAll().size();
 
         // Create the Member
-        MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+        MemberDTO memberDTO = memberMapper.toDto(member);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restMemberMockMvc.perform(put("/api/members")
@@ -291,5 +291,37 @@ public class MemberResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Member.class);
+        Member member1 = new Member();
+        member1.setId(1L);
+        Member member2 = new Member();
+        member2.setId(member1.getId());
+        assertThat(member1).isEqualTo(member2);
+        member2.setId(2L);
+        assertThat(member1).isNotEqualTo(member2);
+        member1.setId(null);
+        assertThat(member1).isNotEqualTo(member2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(MemberDTO.class);
+        MemberDTO memberDTO1 = new MemberDTO();
+        memberDTO1.setId(1L);
+        MemberDTO memberDTO2 = new MemberDTO();
+        assertThat(memberDTO1).isNotEqualTo(memberDTO2);
+        memberDTO2.setId(memberDTO1.getId());
+        assertThat(memberDTO1).isEqualTo(memberDTO2);
+        memberDTO2.setId(2L);
+        assertThat(memberDTO1).isNotEqualTo(memberDTO2);
+        memberDTO1.setId(null);
+        assertThat(memberDTO1).isNotEqualTo(memberDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(memberMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(memberMapper.fromId(null)).isNull();
     }
 }

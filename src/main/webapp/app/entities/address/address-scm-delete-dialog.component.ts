@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, JhiLanguageService } from 'ng-jhipster';
+import { EventManager } from 'ng-jhipster';
 
 import { AddressScm } from './address-scm.model';
 import { AddressScmPopupService } from './address-scm-popup.service';
@@ -17,12 +17,10 @@ export class AddressScmDeleteDialogComponent {
     address: AddressScm;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private addressService: AddressScmService,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['address']);
     }
 
     clear() {

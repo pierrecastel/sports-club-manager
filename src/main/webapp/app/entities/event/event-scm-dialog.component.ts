@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService, JhiLanguageService } from 'ng-jhipster';
+import { EventManager, AlertService } from 'ng-jhipster';
 
 import { EventScm } from './event-scm.model';
 import { EventScmPopupService } from './event-scm-popup.service';
@@ -11,6 +12,7 @@ import { EventScmService } from './event-scm.service';
 import { TeamScm, TeamScmService } from '../team';
 import { LocationScm, LocationScmService } from '../location';
 import { User, UserService } from '../../shared';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-event-scm-dialog',
@@ -27,9 +29,10 @@ export class EventScmDialogComponent implements OnInit {
     locations: LocationScm[];
 
     users: User[];
-        constructor(
+    dateDp: any;
+
+    constructor(
         public activeModal: NgbActiveModal,
-        private jhiLanguageService: JhiLanguageService,
         private alertService: AlertService,
         private eventService: EventScmService,
         private teamService: TeamScmService,
@@ -37,18 +40,17 @@ export class EventScmDialogComponent implements OnInit {
         private userService: UserService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['event', 'eventType', 'eventState']);
     }
 
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.teamService.query().subscribe(
-            (res: Response) => { this.teams = res.json(); }, (res: Response) => this.onError(res.json()));
-        this.locationService.query().subscribe(
-            (res: Response) => { this.locations = res.json(); }, (res: Response) => this.onError(res.json()));
-        this.userService.query().subscribe(
-            (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.teamService.query()
+            .subscribe((res: ResponseWrapper) => { this.teams = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.locationService.query()
+            .subscribe((res: ResponseWrapper) => { this.locations = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
     clear() {
         this.activeModal.dismiss('cancel');
@@ -57,14 +59,17 @@ export class EventScmDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.event.id !== undefined) {
-            this.eventService.update(this.event)
-                .subscribe((res: EventScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.eventService.update(this.event));
         } else {
-            this.eventService.create(this.event)
-                .subscribe((res: EventScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.eventService.create(this.event));
         }
+    }
+
+    private subscribeToSaveResponse(result: Observable<EventScm>) {
+        result.subscribe((res: EventScm) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
     private onSaveSuccess(result: EventScm) {

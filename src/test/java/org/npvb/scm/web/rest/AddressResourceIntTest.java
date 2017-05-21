@@ -109,7 +109,7 @@ public class AddressResourceIntTest {
         int databaseSizeBeforeCreate = addressRepository.findAll().size();
 
         // Create the Address
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(addressDTO)))
@@ -131,7 +131,7 @@ public class AddressResourceIntTest {
 
         // Create the Address with an existing ID
         address.setId(1L);
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restAddressMockMvc.perform(post("/api/addresses")
@@ -152,7 +152,7 @@ public class AddressResourceIntTest {
         address.setStreet(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -171,7 +171,7 @@ public class AddressResourceIntTest {
         address.setZipCode(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -190,7 +190,7 @@ public class AddressResourceIntTest {
         address.setCity(null);
 
         // Create the Address, which fails.
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         restAddressMockMvc.perform(post("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -254,7 +254,7 @@ public class AddressResourceIntTest {
             .street(UPDATED_STREET)
             .zipCode(UPDATED_ZIP_CODE)
             .city(UPDATED_CITY);
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(updatedAddress);
+        AddressDTO addressDTO = addressMapper.toDto(updatedAddress);
 
         restAddressMockMvc.perform(put("/api/addresses")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -276,7 +276,7 @@ public class AddressResourceIntTest {
         int databaseSizeBeforeUpdate = addressRepository.findAll().size();
 
         // Create the Address
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restAddressMockMvc.perform(put("/api/addresses")
@@ -310,5 +310,37 @@ public class AddressResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Address.class);
+        Address address1 = new Address();
+        address1.setId(1L);
+        Address address2 = new Address();
+        address2.setId(address1.getId());
+        assertThat(address1).isEqualTo(address2);
+        address2.setId(2L);
+        assertThat(address1).isNotEqualTo(address2);
+        address1.setId(null);
+        assertThat(address1).isNotEqualTo(address2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(AddressDTO.class);
+        AddressDTO addressDTO1 = new AddressDTO();
+        addressDTO1.setId(1L);
+        AddressDTO addressDTO2 = new AddressDTO();
+        assertThat(addressDTO1).isNotEqualTo(addressDTO2);
+        addressDTO2.setId(addressDTO1.getId());
+        assertThat(addressDTO1).isEqualTo(addressDTO2);
+        addressDTO2.setId(2L);
+        assertThat(addressDTO1).isNotEqualTo(addressDTO2);
+        addressDTO1.setId(null);
+        assertThat(addressDTO1).isNotEqualTo(addressDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(addressMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(addressMapper.fromId(null)).isNull();
     }
 }

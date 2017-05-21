@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, URLSearchParams, BaseRequestOptions } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
 
 import { LocationScm } from './location-scm.model';
+import { ResponseWrapper, createRequestOption } from '../../shared';
+
 @Injectable()
 export class LocationScmService {
 
@@ -11,14 +13,14 @@ export class LocationScmService {
     constructor(private http: Http) { }
 
     create(location: LocationScm): Observable<LocationScm> {
-        const copy: LocationScm = Object.assign({}, location);
+        const copy = this.convert(location);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
             return res.json();
         });
     }
 
     update(location: LocationScm): Observable<LocationScm> {
-        const copy: LocationScm = Object.assign({}, location);
+        const copy = this.convert(location);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
             return res.json();
         });
@@ -30,28 +32,23 @@ export class LocationScmService {
         });
     }
 
-    query(req?: any): Observable<Response> {
-        const options = this.createRequestOption(req);
+    query(req?: any): Observable<ResponseWrapper> {
+        const options = createRequestOption(req);
         return this.http.get(this.resourceUrl, options)
-        ;
+            .map((res: Response) => this.convertResponse(res));
     }
 
     delete(id: number): Observable<Response> {
         return this.http.delete(`${this.resourceUrl}/${id}`);
     }
-    private createRequestOption(req?: any): BaseRequestOptions {
-        const options: BaseRequestOptions = new BaseRequestOptions();
-        if (req) {
-            const params: URLSearchParams = new URLSearchParams();
-            params.set('page', req.page);
-            params.set('size', req.size);
-            if (req.sort) {
-                params.paramsMap.set('sort', req.sort);
-            }
-            params.set('query', req.query);
 
-            options.search = params;
-        }
-        return options;
+    private convertResponse(res: Response): ResponseWrapper {
+        const jsonResponse = res.json();
+        return new ResponseWrapper(res.headers, jsonResponse);
+    }
+
+    private convert(location: LocationScm): LocationScm {
+        const copy: LocationScm = Object.assign({}, location);
+        return copy;
     }
 }

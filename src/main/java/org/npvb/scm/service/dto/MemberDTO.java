@@ -1,5 +1,6 @@
 package org.npvb.scm.service.dto;
 
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -40,6 +41,7 @@ public class MemberDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -47,6 +49,7 @@ public class MemberDTO implements Serializable {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public String getMobilePhoneNumber() {
         return mobilePhoneNumber;
     }
@@ -54,6 +57,7 @@ public class MemberDTO implements Serializable {
     public void setMobilePhoneNumber(String mobilePhoneNumber) {
         this.mobilePhoneNumber = mobilePhoneNumber;
     }
+
     public byte[] getPhoto() {
         return photo;
     }
@@ -69,6 +73,7 @@ public class MemberDTO implements Serializable {
     public void setPhotoContentType(String photoContentType) {
         this.photoContentType = photoContentType;
     }
+
     public LocalDate getBirthDate() {
         return birthDate;
     }
@@ -76,6 +81,7 @@ public class MemberDTO implements Serializable {
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
+
     public String getJob() {
         return job;
     }
@@ -83,7 +89,8 @@ public class MemberDTO implements Serializable {
     public void setJob(String job) {
         this.job = job;
     }
-    public Boolean getShowInfo() {
+
+    public Boolean isShowInfo() {
         return showInfo;
     }
 
@@ -109,27 +116,27 @@ public class MemberDTO implements Serializable {
         }
 
         MemberDTO memberDTO = (MemberDTO) o;
-
-        if ( ! Objects.equals(id, memberDTO.id)) { return false; }
-
-        return true;
+        if(memberDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), memberDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "MemberDTO{" +
-            "id=" + id +
-            ", phoneNumber='" + phoneNumber + "'" +
-            ", mobilePhoneNumber='" + mobilePhoneNumber + "'" +
-            ", photo='" + photo + "'" +
-            ", birthDate='" + birthDate + "'" +
-            ", job='" + job + "'" +
-            ", showInfo='" + showInfo + "'" +
-            '}';
+            "id=" + getId() +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", mobilePhoneNumber='" + getMobilePhoneNumber() + "'" +
+            ", photo='" + getPhoto() + "'" +
+            ", birthDate='" + getBirthDate() + "'" +
+            ", job='" + getJob() + "'" +
+            ", showInfo='" + isShowInfo() + "'" +
+            "}";
     }
 }

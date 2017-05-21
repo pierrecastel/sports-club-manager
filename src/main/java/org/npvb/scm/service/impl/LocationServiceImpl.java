@@ -41,9 +41,9 @@ public class LocationServiceImpl implements LocationService{
     @Override
     public LocationDTO save(LocationDTO locationDTO) {
         log.debug("Request to save Location : {}", locationDTO);
-        Location location = locationMapper.locationDTOToLocation(locationDTO);
+        Location location = locationMapper.toEntity(locationDTO);
         location = locationRepository.save(location);
-        LocationDTO result = locationMapper.locationToLocationDTO(location);
+        LocationDTO result = locationMapper.toDto(location);
         return result;
     }
 
@@ -57,7 +57,7 @@ public class LocationServiceImpl implements LocationService{
     public List<LocationDTO> findAll() {
         log.debug("Request to get all Locations");
         List<LocationDTO> result = locationRepository.findAll().stream()
-            .map(locationMapper::locationToLocationDTO)
+            .map(locationMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
 
         return result;
@@ -74,7 +74,7 @@ public class LocationServiceImpl implements LocationService{
     public LocationDTO findOne(Long id) {
         log.debug("Request to get Location : {}", id);
         Location location = locationRepository.findOne(id);
-        LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
+        LocationDTO locationDTO = locationMapper.toDto(location);
         return locationDTO;
     }
 

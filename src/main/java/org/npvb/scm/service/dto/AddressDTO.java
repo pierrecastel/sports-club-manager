@@ -31,6 +31,7 @@ public class AddressDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getStreet() {
         return street;
     }
@@ -38,6 +39,7 @@ public class AddressDTO implements Serializable {
     public void setStreet(String street) {
         this.street = street;
     }
+
     public String getZipCode() {
         return zipCode;
     }
@@ -45,6 +47,7 @@ public class AddressDTO implements Serializable {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
+
     public String getCity() {
         return city;
     }
@@ -63,24 +66,24 @@ public class AddressDTO implements Serializable {
         }
 
         AddressDTO addressDTO = (AddressDTO) o;
-
-        if ( ! Objects.equals(id, addressDTO.id)) { return false; }
-
-        return true;
+        if(addressDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), addressDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "AddressDTO{" +
-            "id=" + id +
-            ", street='" + street + "'" +
-            ", zipCode='" + zipCode + "'" +
-            ", city='" + city + "'" +
-            '}';
+            "id=" + getId() +
+            ", street='" + getStreet() + "'" +
+            ", zipCode='" + getZipCode() + "'" +
+            ", city='" + getCity() + "'" +
+            "}";
     }
 }

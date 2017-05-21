@@ -2,13 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService, JhiLanguageService, DataUtils } from 'ng-jhipster';
+import { EventManager, AlertService, DataUtils } from 'ng-jhipster';
 
 import { MemberScm } from './member-scm.model';
 import { MemberScmPopupService } from './member-scm-popup.service';
 import { MemberScmService } from './member-scm.service';
 import { AddressScm, AddressScmService } from '../address';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-member-scm-dialog',
@@ -21,30 +23,34 @@ export class MemberScmDialogComponent implements OnInit {
     isSaving: boolean;
 
     addresses: AddressScm[];
-        constructor(
+    birthDateDp: any;
+
+    constructor(
         public activeModal: NgbActiveModal,
-        private jhiLanguageService: JhiLanguageService,
         private dataUtils: DataUtils,
         private alertService: AlertService,
         private memberService: MemberScmService,
         private addressService: AddressScmService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['member']);
     }
 
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.addressService.query({filter: 'member-is-null'}).subscribe((res: Response) => {
-            if (!this.member.addressId) {
-                this.addresses = res.json();
-            } else {
-                this.addressService.find(this.member.addressId).subscribe((subRes: AddressScm) => {
-                    this.addresses = [subRes].concat(res.json());
-                }, (subRes: Response) => this.onError(subRes.json()));
-            }
-        }, (res: Response) => this.onError(res.json()));
+        this.addressService
+            .query({filter: 'member-is-null'})
+            .subscribe((res: ResponseWrapper) => {
+                if (!this.member.addressId) {
+                    this.addresses = res.json;
+                } else {
+                    this.addressService
+                        .find(this.member.addressId)
+                        .subscribe((subRes: AddressScm) => {
+                            this.addresses = [subRes].concat(res.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                }
+            }, (res: ResponseWrapper) => this.onError(res.json));
     }
     byteSize(field) {
         return this.dataUtils.byteSize(field);
@@ -73,14 +79,17 @@ export class MemberScmDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.member.id !== undefined) {
-            this.memberService.update(this.member)
-                .subscribe((res: MemberScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.memberService.update(this.member));
         } else {
-            this.memberService.create(this.member)
-                .subscribe((res: MemberScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.memberService.create(this.member));
         }
+    }
+
+    private subscribeToSaveResponse(result: Observable<MemberScm>) {
+        result.subscribe((res: MemberScm) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
     private onSaveSuccess(result: MemberScm) {

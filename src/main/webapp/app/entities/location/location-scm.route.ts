@@ -12,54 +12,54 @@ import { LocationScmDeletePopupComponent } from './location-scm-delete-dialog.co
 import { Principal } from '../../shared';
 
 export const locationRoute: Routes = [
-  {
-    path: 'location-scm',
-    component: LocationScmComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.location.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }, {
-    path: 'location-scm/:id',
-    component: LocationScmDetailComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.location.home.title'
-    },
-    canActivate: [UserRouteAccessService]
-  }
+    {
+        path: 'location-scm',
+        component: LocationScmComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }, {
+        path: 'location-scm/:id',
+        component: LocationScmDetailComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService]
+    }
 ];
 
 export const locationPopupRoute: Routes = [
-  {
-    path: 'location-scm-new',
-    component: LocationScmPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.location.home.title'
+    {
+        path: 'location-scm-new',
+        component: LocationScmPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  },
-  {
-    path: 'location-scm/:id/edit',
-    component: LocationScmPopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.location.home.title'
+    {
+        path: 'location-scm/:id/edit',
+        component: LocationScmPopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
     },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  },
-  {
-    path: 'location-scm/:id/delete',
-    component: LocationScmDeletePopupComponent,
-    data: {
-        authorities: ['ROLE_USER'],
-        pageTitle: 'scmApp.location.home.title'
-    },
-    canActivate: [UserRouteAccessService],
-    outlet: 'popup'
-  }
+    {
+        path: 'location-scm/:id/delete',
+        component: LocationScmDeletePopupComponent,
+        data: {
+            authorities: ['ROLE_USER'],
+            pageTitle: 'scmApp.location.home.title'
+        },
+        canActivate: [UserRouteAccessService],
+        outlet: 'popup'
+    }
 ];

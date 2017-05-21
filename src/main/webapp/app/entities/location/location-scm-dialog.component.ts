@@ -2,13 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService, JhiLanguageService } from 'ng-jhipster';
+import { EventManager, AlertService } from 'ng-jhipster';
 
 import { LocationScm } from './location-scm.model';
 import { LocationScmPopupService } from './location-scm-popup.service';
 import { LocationScmService } from './location-scm.service';
 import { AddressScm, AddressScmService } from '../address';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-location-scm-dialog',
@@ -21,29 +23,32 @@ export class LocationScmDialogComponent implements OnInit {
     isSaving: boolean;
 
     addresses: AddressScm[];
+
     constructor(
         public activeModal: NgbActiveModal,
-        private jhiLanguageService: JhiLanguageService,
         private alertService: AlertService,
         private locationService: LocationScmService,
         private addressService: AddressScmService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['location']);
     }
 
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.addressService.query({filter: 'location-is-null'}).subscribe((res: Response) => {
-            if (!this.location.addressId) {
-                this.addresses = res.json();
-            } else {
-                this.addressService.find(this.location.addressId).subscribe((subRes: AddressScm) => {
-                    this.addresses = [subRes].concat(res.json());
-                }, (subRes: Response) => this.onError(subRes.json()));
-            }
-        }, (res: Response) => this.onError(res.json()));
+        this.addressService
+            .query({filter: 'location-is-null'})
+            .subscribe((res: ResponseWrapper) => {
+                if (!this.location.addressId) {
+                    this.addresses = res.json;
+                } else {
+                    this.addressService
+                        .find(this.location.addressId)
+                        .subscribe((subRes: AddressScm) => {
+                            this.addresses = [subRes].concat(res.json);
+                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
+                }
+            }, (res: ResponseWrapper) => this.onError(res.json));
     }
     clear() {
         this.activeModal.dismiss('cancel');
@@ -52,14 +57,17 @@ export class LocationScmDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.location.id !== undefined) {
-            this.locationService.update(this.location)
-                .subscribe((res: LocationScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.locationService.update(this.location));
         } else {
-            this.locationService.create(this.location)
-                .subscribe((res: LocationScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.locationService.create(this.location));
         }
+    }
+
+    private subscribeToSaveResponse(result: Observable<LocationScm>) {
+        result.subscribe((res: LocationScm) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
     private onSaveSuccess(result: LocationScm) {

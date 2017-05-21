@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, JhiLanguageService } from 'ng-jhipster';
+import { EventManager } from 'ng-jhipster';
 
 import { LocationScm } from './location-scm.model';
 import { LocationScmPopupService } from './location-scm-popup.service';
@@ -17,12 +17,10 @@ export class LocationScmDeleteDialogComponent {
     location: LocationScm;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private locationService: LocationScmService,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['location']);
     }
 
     clear() {

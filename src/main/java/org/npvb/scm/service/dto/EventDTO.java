@@ -1,5 +1,6 @@
 package org.npvb.scm.service.dto;
 
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -49,6 +50,7 @@ public class EventDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getTitle() {
         return title;
     }
@@ -56,6 +58,7 @@ public class EventDTO implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
     public EventType getType() {
         return type;
     }
@@ -63,6 +66,7 @@ public class EventDTO implements Serializable {
     public void setType(EventType type) {
         this.type = type;
     }
+
     public LocalDate getDate() {
         return date;
     }
@@ -70,6 +74,7 @@ public class EventDTO implements Serializable {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
     public EventState getState() {
         return state;
     }
@@ -77,6 +82,7 @@ public class EventDTO implements Serializable {
     public void setState(EventState state) {
         this.state = state;
     }
+
     public Integer getNumberOfPlaces() {
         return numberOfPlaces;
     }
@@ -84,13 +90,15 @@ public class EventDTO implements Serializable {
     public void setNumberOfPlaces(Integer numberOfPlaces) {
         this.numberOfPlaces = numberOfPlaces;
     }
-    public Boolean getIsHome() {
+
+    public Boolean isIsHome() {
         return isHome;
     }
 
     public void setIsHome(Boolean isHome) {
         this.isHome = isHome;
     }
+
     public String getComment() {
         return comment;
     }
@@ -133,28 +141,28 @@ public class EventDTO implements Serializable {
         }
 
         EventDTO eventDTO = (EventDTO) o;
-
-        if ( ! Objects.equals(id, eventDTO.id)) { return false; }
-
-        return true;
+        if(eventDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), eventDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "EventDTO{" +
-            "id=" + id +
-            ", title='" + title + "'" +
-            ", type='" + type + "'" +
-            ", date='" + date + "'" +
-            ", state='" + state + "'" +
-            ", numberOfPlaces='" + numberOfPlaces + "'" +
-            ", isHome='" + isHome + "'" +
-            ", comment='" + comment + "'" +
-            '}';
+            "id=" + getId() +
+            ", title='" + getTitle() + "'" +
+            ", type='" + getType() + "'" +
+            ", date='" + getDate() + "'" +
+            ", state='" + getState() + "'" +
+            ", numberOfPlaces='" + getNumberOfPlaces() + "'" +
+            ", isHome='" + isIsHome() + "'" +
+            ", comment='" + getComment() + "'" +
+            "}";
     }
 }

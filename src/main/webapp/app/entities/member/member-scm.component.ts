@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, JhiLanguageService, AlertService, DataUtils } from 'ng-jhipster';
 
 import { MemberScm } from './member-scm.model';
 import { MemberScmService } from './member-scm.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -19,22 +18,20 @@ members: MemberScm[];
     eventSubscriber: Subscription;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private memberService: MemberScmService,
         private alertService: AlertService,
         private dataUtils: DataUtils,
         private eventManager: EventManager,
         private principal: Principal
     ) {
-        this.jhiLanguageService.setLocations(['member']);
     }
 
     loadAll() {
         this.memberService.query().subscribe(
-            (res: Response) => {
-                this.members = res.json();
+            (res: ResponseWrapper) => {
+                this.members = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {
