@@ -4,23 +4,16 @@ import org.npvb.scm.domain.*;
 import org.npvb.scm.service.dto.LocationDTO;
 
 import org.mapstruct.*;
-import java.util.List;
 
 /**
  * Mapper for the entity Location and its DTO LocationDTO.
  */
 @Mapper(componentModel = "spring", uses = {AddressMapper.class, })
-public interface LocationMapper {
-
+public interface LocationMapper extends EntityMapper <LocationDTO, Location> {
     @Mapping(source = "address.id", target = "addressId")
-    LocationDTO locationToLocationDTO(Location location);
-
-    List<LocationDTO> locationsToLocationDTOs(List<Location> locations);
-
+    LocationDTO toDto(Location location); 
     @Mapping(source = "addressId", target = "address")
-    Location locationDTOToLocation(LocationDTO locationDTO);
-
-    List<Location> locationDTOsToLocations(List<LocationDTO> locationDTOs);
+    Location toEntity(LocationDTO locationDTO); 
     /**
      * generating the fromId for all mappers if the databaseType is sql, as the class has relationship to it might need it, instead of
      * creating a new attribute to know if the entity has any relationship from some other entity
@@ -29,7 +22,7 @@ public interface LocationMapper {
      * @return the entity instance
      */
      
-    default Location locationFromId(Long id) {
+    default Location fromId(Long id) {
         if (id == null) {
             return null;
         }
@@ -37,6 +30,4 @@ public interface LocationMapper {
         location.setId(id);
         return location;
     }
-    
-
 }

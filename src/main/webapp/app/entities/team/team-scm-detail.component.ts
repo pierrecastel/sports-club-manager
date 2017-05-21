@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { EventManager , JhiLanguageService  } from 'ng-jhipster';
+import { EventManager  } from 'ng-jhipster';
 
 import { TeamScm } from './team-scm.model';
 import { TeamScmService } from './team-scm.service';
@@ -13,16 +13,14 @@ import { TeamScmService } from './team-scm.service';
 export class TeamScmDetailComponent implements OnInit, OnDestroy {
 
     team: TeamScm;
-    private subscription: any;
+    private subscription: Subscription;
     private eventSubscriber: Subscription;
 
     constructor(
         private eventManager: EventManager,
-        private jhiLanguageService: JhiLanguageService,
         private teamService: TeamScmService,
         private route: ActivatedRoute
     ) {
-        this.jhiLanguageService.setLocations(['team']);
     }
 
     ngOnInit() {
@@ -47,6 +45,9 @@ export class TeamScmDetailComponent implements OnInit, OnDestroy {
     }
 
     registerChangeInTeams() {
-        this.eventSubscriber = this.eventManager.subscribe('teamListModification', (response) => this.load(this.team.id));
+        this.eventSubscriber = this.eventManager.subscribe(
+            'teamListModification',
+            (response) => this.load(this.team.id)
+        );
     }
 }

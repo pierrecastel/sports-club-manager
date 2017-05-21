@@ -3,7 +3,6 @@ package org.npvb.scm.service;
 import org.npvb.scm.service.dto.EventDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import java.util.List;
 
 /**
  * Service Interface for managing Event.

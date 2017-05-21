@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { LocationScm } from './location-scm.model';
 import { LocationScmService } from './location-scm.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -19,21 +18,19 @@ locations: LocationScm[];
     eventSubscriber: Subscription;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private locationService: LocationScmService,
         private alertService: AlertService,
         private eventManager: EventManager,
         private principal: Principal
     ) {
-        this.jhiLanguageService.setLocations(['location']);
     }
 
     loadAll() {
         this.locationService.query().subscribe(
-            (res: Response) => {
-                this.locations = res.json();
+            (res: ResponseWrapper) => {
+                this.locations = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { EventManager , JhiLanguageService , DataUtils } from 'ng-jhipster';
+import { EventManager , DataUtils } from 'ng-jhipster';
 
 import { MemberScm } from './member-scm.model';
 import { MemberScmService } from './member-scm.service';
@@ -13,17 +13,15 @@ import { MemberScmService } from './member-scm.service';
 export class MemberScmDetailComponent implements OnInit, OnDestroy {
 
     member: MemberScm;
-    private subscription: any;
+    private subscription: Subscription;
     private eventSubscriber: Subscription;
 
     constructor(
         private eventManager: EventManager,
-        private jhiLanguageService: JhiLanguageService,
         private dataUtils: DataUtils,
         private memberService: MemberScmService,
         private route: ActivatedRoute
     ) {
-        this.jhiLanguageService.setLocations(['member']);
     }
 
     ngOnInit() {
@@ -55,6 +53,9 @@ export class MemberScmDetailComponent implements OnInit, OnDestroy {
     }
 
     registerChangeInMembers() {
-        this.eventSubscriber = this.eventManager.subscribe('memberListModification', (response) => this.load(this.member.id));
+        this.eventSubscriber = this.eventManager.subscribe(
+            'memberListModification',
+            (response) => this.load(this.member.id)
+        );
     }
 }

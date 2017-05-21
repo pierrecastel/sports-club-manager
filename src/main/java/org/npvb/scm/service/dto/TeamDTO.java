@@ -31,6 +31,7 @@ public class TeamDTO implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
     public String getName() {
         return name;
     }
@@ -73,22 +74,22 @@ public class TeamDTO implements Serializable {
         }
 
         TeamDTO teamDTO = (TeamDTO) o;
-
-        if ( ! Objects.equals(id, teamDTO.id)) { return false; }
-
-        return true;
+        if(teamDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), teamDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "TeamDTO{" +
-            "id=" + id +
-            ", name='" + name + "'" +
-            '}';
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            "}";
     }
 }

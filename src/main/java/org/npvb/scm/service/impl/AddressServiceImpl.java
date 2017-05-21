@@ -41,9 +41,9 @@ public class AddressServiceImpl implements AddressService{
     @Override
     public AddressDTO save(AddressDTO addressDTO) {
         log.debug("Request to save Address : {}", addressDTO);
-        Address address = addressMapper.addressDTOToAddress(addressDTO);
+        Address address = addressMapper.toEntity(addressDTO);
         address = addressRepository.save(address);
-        AddressDTO result = addressMapper.addressToAddressDTO(address);
+        AddressDTO result = addressMapper.toDto(address);
         return result;
     }
 
@@ -57,7 +57,7 @@ public class AddressServiceImpl implements AddressService{
     public List<AddressDTO> findAll() {
         log.debug("Request to get all Addresses");
         List<AddressDTO> result = addressRepository.findAll().stream()
-            .map(addressMapper::addressToAddressDTO)
+            .map(addressMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
 
         return result;
@@ -74,7 +74,7 @@ public class AddressServiceImpl implements AddressService{
     public AddressDTO findOne(Long id) {
         log.debug("Request to get Address : {}", id);
         Address address = addressRepository.findOne(id);
-        AddressDTO addressDTO = addressMapper.addressToAddressDTO(address);
+        AddressDTO addressDTO = addressMapper.toDto(address);
         return addressDTO;
     }
 

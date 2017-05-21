@@ -41,9 +41,9 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public MemberDTO save(MemberDTO memberDTO) {
         log.debug("Request to save Member : {}", memberDTO);
-        Member member = memberMapper.memberDTOToMember(memberDTO);
+        Member member = memberMapper.toEntity(memberDTO);
         member = memberRepository.save(member);
-        MemberDTO result = memberMapper.memberToMemberDTO(member);
+        MemberDTO result = memberMapper.toDto(member);
         return result;
     }
 
@@ -57,7 +57,7 @@ public class MemberServiceImpl implements MemberService{
     public List<MemberDTO> findAll() {
         log.debug("Request to get all Members");
         List<MemberDTO> result = memberRepository.findAll().stream()
-            .map(memberMapper::memberToMemberDTO)
+            .map(memberMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
 
         return result;
@@ -74,7 +74,7 @@ public class MemberServiceImpl implements MemberService{
     public MemberDTO findOne(Long id) {
         log.debug("Request to get Member : {}", id);
         Member member = memberRepository.findOne(id);
-        MemberDTO memberDTO = memberMapper.memberToMemberDTO(member);
+        MemberDTO memberDTO = memberMapper.toDto(member);
         return memberDTO;
     }
 

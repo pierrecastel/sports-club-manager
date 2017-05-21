@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, JhiLanguageService } from 'ng-jhipster';
+import { EventManager } from 'ng-jhipster';
 
 import { MemberScm } from './member-scm.model';
 import { MemberScmPopupService } from './member-scm-popup.service';
@@ -17,12 +17,10 @@ export class MemberScmDeleteDialogComponent {
     member: MemberScm;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private memberService: MemberScmService,
         public activeModal: NgbActiveModal,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['member']);
     }
 
     clear() {

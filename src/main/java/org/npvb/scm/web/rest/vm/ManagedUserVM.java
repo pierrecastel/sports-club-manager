@@ -3,8 +3,8 @@ package org.npvb.scm.web.rest.vm;
 import org.npvb.scm.service.dto.UserDTO;
 
 import javax.validation.constraints.Size;
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.Set;
 
 /**
@@ -34,7 +34,7 @@ public class ManagedUserVM extends UserDTO {
 
     public ManagedUserVM(Long id, String login, String password, String firstName, String lastName, String email,
                          String phoneNumber, boolean activated, String imageUrl, String langKey, String createdBy,
-                         ZonedDateTime createdDate, String lastModifiedBy, ZonedDateTime lastModifiedDate,
+                         Instant createdDate, String lastModifiedBy, Instant lastModifiedDate,
                          Set<String> authorities) {
 
         this(id, login, password, firstName, lastName, email, phoneNumber, null, null, null, null, null, null,
@@ -45,8 +45,8 @@ public class ManagedUserVM extends UserDTO {
     public ManagedUserVM(Long id, String login, String password, String firstName, String lastName, String email,
                          String phoneNumber, String mobilePhoneNumber, byte[] photo, String photoContentType,
                          LocalDate birthDate, String job, Boolean showInfo, Long addressId, boolean activated,
-                         String imageUrl, String langKey, String createdBy, ZonedDateTime createdDate,
-                         String lastModifiedBy, ZonedDateTime lastModifiedDate,
+                         String imageUrl, String langKey, String createdBy, Instant createdDate,
+                         String lastModifiedBy, Instant lastModifiedDate,
                          Set<String> authorities) {
 
         super(id, login, firstName, lastName, email, activated, imageUrl, langKey,

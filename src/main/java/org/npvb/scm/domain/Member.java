@@ -188,28 +188,28 @@ public class Member implements Serializable {
             return false;
         }
         Member member = (Member) o;
-        if (member.id == null || id == null) {
+        if (member.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, member.id);
+        return Objects.equals(getId(), member.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "Member{" +
-            "id=" + id +
-            ", phoneNumber='" + phoneNumber + "'" +
-            ", mobilePhoneNumber='" + mobilePhoneNumber + "'" +
-            ", photo='" + photo + "'" +
+            "id=" + getId() +
+            ", phoneNumber='" + getPhoneNumber() + "'" +
+            ", mobilePhoneNumber='" + getMobilePhoneNumber() + "'" +
+            ", photo='" + getPhoto() + "'" +
             ", photoContentType='" + photoContentType + "'" +
-            ", birthDate='" + birthDate + "'" +
-            ", job='" + job + "'" +
-            ", showInfo='" + showInfo + "'" +
-            '}';
+            ", birthDate='" + getBirthDate() + "'" +
+            ", job='" + getJob() + "'" +
+            ", showInfo='" + isShowInfo() + "'" +
+            "}";
     }
 }

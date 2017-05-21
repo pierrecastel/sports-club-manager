@@ -12,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing Team.
@@ -43,9 +41,9 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public TeamDTO save(TeamDTO teamDTO) {
         log.debug("Request to save Team : {}", teamDTO);
-        Team team = teamMapper.teamDTOToTeam(teamDTO);
+        Team team = teamMapper.toEntity(teamDTO);
         team = teamRepository.save(team);
-        TeamDTO result = teamMapper.teamToTeamDTO(team);
+        TeamDTO result = teamMapper.toDto(team);
         return result;
     }
 
@@ -60,7 +58,7 @@ public class TeamServiceImpl implements TeamService{
     public Page<TeamDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Teams");
         Page<Team> result = teamRepository.findAll(pageable);
-        return result.map(team -> teamMapper.teamToTeamDTO(team));
+        return result.map(team -> teamMapper.toDto(team));
     }
 
     /**
@@ -74,7 +72,7 @@ public class TeamServiceImpl implements TeamService{
     public TeamDTO findOne(Long id) {
         log.debug("Request to get Team : {}", id);
         Team team = teamRepository.findOneWithEagerRelationships(id);
-        TeamDTO teamDTO = teamMapper.teamToTeamDTO(team);
+        TeamDTO teamDTO = teamMapper.toDto(team);
         return teamDTO;
     }
 

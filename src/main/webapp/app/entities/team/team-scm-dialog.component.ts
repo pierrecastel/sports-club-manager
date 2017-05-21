@@ -2,13 +2,15 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService, JhiLanguageService } from 'ng-jhipster';
+import { EventManager, AlertService } from 'ng-jhipster';
 
 import { TeamScm } from './team-scm.model';
 import { TeamScmPopupService } from './team-scm-popup.service';
 import { TeamScmService } from './team-scm.service';
 import { User, UserService } from '../../shared';
+import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-team-scm-dialog',
@@ -21,22 +23,21 @@ export class TeamScmDialogComponent implements OnInit {
     isSaving: boolean;
 
     users: User[];
+
     constructor(
         public activeModal: NgbActiveModal,
-        private jhiLanguageService: JhiLanguageService,
         private alertService: AlertService,
         private teamService: TeamScmService,
         private userService: UserService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['team']);
     }
 
     ngOnInit() {
         this.isSaving = false;
         this.authorities = ['ROLE_USER', 'ROLE_ADMIN'];
-        this.userService.query().subscribe(
-            (res: Response) => { this.users = res.json(); }, (res: Response) => this.onError(res.json()));
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
     clear() {
         this.activeModal.dismiss('cancel');
@@ -45,14 +46,17 @@ export class TeamScmDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.team.id !== undefined) {
-            this.teamService.update(this.team)
-                .subscribe((res: TeamScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.teamService.update(this.team));
         } else {
-            this.teamService.create(this.team)
-                .subscribe((res: TeamScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.teamService.create(this.team));
         }
+    }
+
+    private subscribeToSaveResponse(result: Observable<TeamScm>) {
+        result.subscribe((res: TeamScm) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
     private onSaveSuccess(result: TeamScm) {

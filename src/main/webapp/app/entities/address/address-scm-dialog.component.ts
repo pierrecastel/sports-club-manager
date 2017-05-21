@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Response } from '@angular/http';
 
+import { Observable } from 'rxjs/Rx';
 import { NgbActiveModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { EventManager, AlertService, JhiLanguageService } from 'ng-jhipster';
+import { EventManager, AlertService } from 'ng-jhipster';
 
 import { AddressScm } from './address-scm.model';
 import { AddressScmPopupService } from './address-scm-popup.service';
@@ -18,14 +19,13 @@ export class AddressScmDialogComponent implements OnInit {
     address: AddressScm;
     authorities: any[];
     isSaving: boolean;
+
     constructor(
         public activeModal: NgbActiveModal,
-        private jhiLanguageService: JhiLanguageService,
         private alertService: AlertService,
         private addressService: AddressScmService,
         private eventManager: EventManager
     ) {
-        this.jhiLanguageService.setLocations(['address']);
     }
 
     ngOnInit() {
@@ -39,14 +39,17 @@ export class AddressScmDialogComponent implements OnInit {
     save() {
         this.isSaving = true;
         if (this.address.id !== undefined) {
-            this.addressService.update(this.address)
-                .subscribe((res: AddressScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.addressService.update(this.address));
         } else {
-            this.addressService.create(this.address)
-                .subscribe((res: AddressScm) =>
-                    this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
+            this.subscribeToSaveResponse(
+                this.addressService.create(this.address));
         }
+    }
+
+    private subscribeToSaveResponse(result: Observable<AddressScm>) {
+        result.subscribe((res: AddressScm) =>
+            this.onSaveSuccess(res), (res: Response) => this.onSaveError(res));
     }
 
     private onSaveSuccess(result: AddressScm) {

@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { TeamScm } from './team-scm.model';
 import { TeamScmService } from './team-scm.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -27,7 +26,6 @@ export class TeamScmComponent implements OnInit, OnDestroy {
     totalItems: number;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private teamService: TeamScmService,
         private alertService: AlertService,
         private eventManager: EventManager,
@@ -42,7 +40,6 @@ export class TeamScmComponent implements OnInit, OnDestroy {
         };
         this.predicate = 'id';
         this.reverse = true;
-        this.jhiLanguageService.setLocations(['team']);
     }
 
     loadAll() {
@@ -51,8 +48,8 @@ export class TeamScmComponent implements OnInit, OnDestroy {
             size: this.itemsPerPage,
             sort: this.sort()
         }).subscribe(
-            (res: Response) => this.onSuccess(res.json(), res.headers),
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onSuccess(res.json, res.headers),
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
 

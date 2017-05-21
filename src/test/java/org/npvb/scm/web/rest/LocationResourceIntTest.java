@@ -101,7 +101,7 @@ public class LocationResourceIntTest {
         int databaseSizeBeforeCreate = locationRepository.findAll().size();
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
+        LocationDTO locationDTO = locationMapper.toDto(location);
         restLocationMockMvc.perform(post("/api/locations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(locationDTO)))
@@ -121,7 +121,7 @@ public class LocationResourceIntTest {
 
         // Create the Location with an existing ID
         location.setId(1L);
-        LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
+        LocationDTO locationDTO = locationMapper.toDto(location);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restLocationMockMvc.perform(post("/api/locations")
@@ -142,7 +142,7 @@ public class LocationResourceIntTest {
         location.setTitle(null);
 
         // Create the Location, which fails.
-        LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
+        LocationDTO locationDTO = locationMapper.toDto(location);
 
         restLocationMockMvc.perform(post("/api/locations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -200,7 +200,7 @@ public class LocationResourceIntTest {
         Location updatedLocation = locationRepository.findOne(location.getId());
         updatedLocation
             .title(UPDATED_TITLE);
-        LocationDTO locationDTO = locationMapper.locationToLocationDTO(updatedLocation);
+        LocationDTO locationDTO = locationMapper.toDto(updatedLocation);
 
         restLocationMockMvc.perform(put("/api/locations")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -220,7 +220,7 @@ public class LocationResourceIntTest {
         int databaseSizeBeforeUpdate = locationRepository.findAll().size();
 
         // Create the Location
-        LocationDTO locationDTO = locationMapper.locationToLocationDTO(location);
+        LocationDTO locationDTO = locationMapper.toDto(location);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restLocationMockMvc.perform(put("/api/locations")
@@ -254,5 +254,37 @@ public class LocationResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Location.class);
+        Location location1 = new Location();
+        location1.setId(1L);
+        Location location2 = new Location();
+        location2.setId(location1.getId());
+        assertThat(location1).isEqualTo(location2);
+        location2.setId(2L);
+        assertThat(location1).isNotEqualTo(location2);
+        location1.setId(null);
+        assertThat(location1).isNotEqualTo(location2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(LocationDTO.class);
+        LocationDTO locationDTO1 = new LocationDTO();
+        locationDTO1.setId(1L);
+        LocationDTO locationDTO2 = new LocationDTO();
+        assertThat(locationDTO1).isNotEqualTo(locationDTO2);
+        locationDTO2.setId(locationDTO1.getId());
+        assertThat(locationDTO1).isEqualTo(locationDTO2);
+        locationDTO2.setId(2L);
+        assertThat(locationDTO1).isNotEqualTo(locationDTO2);
+        locationDTO1.setId(null);
+        assertThat(locationDTO1).isNotEqualTo(locationDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(locationMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(locationMapper.fromId(null)).isNull();
     }
 }

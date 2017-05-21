@@ -1,18 +1,16 @@
 package org.npvb.scm.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-
+import org.apache.commons.lang3.StringUtils;
 import org.npvb.scm.domain.User;
 import org.npvb.scm.repository.UserRepository;
 import org.npvb.scm.security.SecurityUtils;
 import org.npvb.scm.service.MailService;
 import org.npvb.scm.service.UserService;
 import org.npvb.scm.service.dto.UserDTO;
+import org.npvb.scm.web.rest.util.HeaderUtil;
 import org.npvb.scm.web.rest.vm.KeyAndPasswordVM;
 import org.npvb.scm.web.rest.vm.ManagedUserVM;
-import org.npvb.scm.web.rest.util.HeaderUtil;
-
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.*;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -55,7 +53,7 @@ public class AccountResource {
      * @return the ResponseEntity with status 201 (Created) if the user is registered or 400 (Bad Request) if the login or email is already in use
      */
     @PostMapping(path = "/register",
-                    produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
+        produces={MediaType.APPLICATION_JSON_VALUE, MediaType.TEXT_PLAIN_VALUE})
     @Timed
     public ResponseEntity registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
 
@@ -128,12 +126,13 @@ public class AccountResource {
     @PostMapping("/account")
     @Timed
     public ResponseEntity saveAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+        final String userLogin = SecurityUtils.getCurrentUserLogin();
         Optional<User> existingUser = userRepository.findOneByEmail(managedUserVM.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(managedUserVM.getLogin()))) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("user-management", "emailexists", "Email already in use")).body(null);
         }
         return userRepository
-            .findOneByLogin(SecurityUtils.getCurrentUserLogin())
+            .findOneByLogin(userLogin)
             .map(u -> {
                 userService.updateUser(managedUserVM.getFirstName(), managedUserVM.getLastName(), managedUserVM.getEmail(),
                     managedUserVM.getLangKey(), managedUserVM.getImageUrl());

@@ -93,24 +93,24 @@ public class Address implements Serializable {
             return false;
         }
         Address address = (Address) o;
-        if (address.id == null || id == null) {
+        if (address.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(id, address.id);
+        return Objects.equals(getId(), address.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id);
+        return Objects.hashCode(getId());
     }
 
     @Override
     public String toString() {
         return "Address{" +
-            "id=" + id +
-            ", street='" + street + "'" +
-            ", zipCode='" + zipCode + "'" +
-            ", city='" + city + "'" +
-            '}';
+            "id=" + getId() +
+            ", street='" + getStreet() + "'" +
+            ", zipCode='" + getZipCode() + "'" +
+            ", city='" + getCity() + "'" +
+            "}";
     }
 }

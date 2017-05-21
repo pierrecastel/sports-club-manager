@@ -1,12 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Response } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { EventManager, ParseLinks, PaginationUtil, JhiLanguageService, AlertService } from 'ng-jhipster';
 
 import { AddressScm } from './address-scm.model';
 import { AddressScmService } from './address-scm.service';
-import { ITEMS_PER_PAGE, Principal } from '../../shared';
+import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
 import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
 
 @Component({
@@ -19,21 +18,19 @@ addresses: AddressScm[];
     eventSubscriber: Subscription;
 
     constructor(
-        private jhiLanguageService: JhiLanguageService,
         private addressService: AddressScmService,
         private alertService: AlertService,
         private eventManager: EventManager,
         private principal: Principal
     ) {
-        this.jhiLanguageService.setLocations(['address']);
     }
 
     loadAll() {
         this.addressService.query().subscribe(
-            (res: Response) => {
-                this.addresses = res.json();
+            (res: ResponseWrapper) => {
+                this.addresses = res.json;
             },
-            (res: Response) => this.onError(res.json())
+            (res: ResponseWrapper) => this.onError(res.json)
         );
     }
     ngOnInit() {

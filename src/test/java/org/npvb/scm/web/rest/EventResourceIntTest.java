@@ -129,7 +129,7 @@ public class EventResourceIntTest {
         int databaseSizeBeforeCreate = eventRepository.findAll().size();
 
         // Create the Event
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(eventDTO)))
@@ -155,7 +155,7 @@ public class EventResourceIntTest {
 
         // Create the Event with an existing ID
         event.setId(1L);
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restEventMockMvc.perform(post("/api/events")
@@ -176,7 +176,7 @@ public class EventResourceIntTest {
         event.setTitle(null);
 
         // Create the Event, which fails.
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
 
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -195,7 +195,7 @@ public class EventResourceIntTest {
         event.setType(null);
 
         // Create the Event, which fails.
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
 
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -214,7 +214,7 @@ public class EventResourceIntTest {
         event.setDate(null);
 
         // Create the Event, which fails.
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
 
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -233,7 +233,7 @@ public class EventResourceIntTest {
         event.setState(null);
 
         // Create the Event, which fails.
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
 
         restEventMockMvc.perform(post("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -309,7 +309,7 @@ public class EventResourceIntTest {
             .numberOfPlaces(UPDATED_NUMBER_OF_PLACES)
             .isHome(UPDATED_IS_HOME)
             .comment(UPDATED_COMMENT);
-        EventDTO eventDTO = eventMapper.eventToEventDTO(updatedEvent);
+        EventDTO eventDTO = eventMapper.toDto(updatedEvent);
 
         restEventMockMvc.perform(put("/api/events")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
@@ -335,7 +335,7 @@ public class EventResourceIntTest {
         int databaseSizeBeforeUpdate = eventRepository.findAll().size();
 
         // Create the Event
-        EventDTO eventDTO = eventMapper.eventToEventDTO(event);
+        EventDTO eventDTO = eventMapper.toDto(event);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restEventMockMvc.perform(put("/api/events")
@@ -369,5 +369,37 @@ public class EventResourceIntTest {
     @Transactional
     public void equalsVerifier() throws Exception {
         TestUtil.equalsVerifier(Event.class);
+        Event event1 = new Event();
+        event1.setId(1L);
+        Event event2 = new Event();
+        event2.setId(event1.getId());
+        assertThat(event1).isEqualTo(event2);
+        event2.setId(2L);
+        assertThat(event1).isNotEqualTo(event2);
+        event1.setId(null);
+        assertThat(event1).isNotEqualTo(event2);
+    }
+
+    @Test
+    @Transactional
+    public void dtoEqualsVerifier() throws Exception {
+        TestUtil.equalsVerifier(EventDTO.class);
+        EventDTO eventDTO1 = new EventDTO();
+        eventDTO1.setId(1L);
+        EventDTO eventDTO2 = new EventDTO();
+        assertThat(eventDTO1).isNotEqualTo(eventDTO2);
+        eventDTO2.setId(eventDTO1.getId());
+        assertThat(eventDTO1).isEqualTo(eventDTO2);
+        eventDTO2.setId(2L);
+        assertThat(eventDTO1).isNotEqualTo(eventDTO2);
+        eventDTO1.setId(null);
+        assertThat(eventDTO1).isNotEqualTo(eventDTO2);
+    }
+
+    @Test
+    @Transactional
+    public void testEntityFromId() {
+        assertThat(eventMapper.fromId(42L).getId()).isEqualTo(42);
+        assertThat(eventMapper.fromId(null)).isNull();
     }
 }
