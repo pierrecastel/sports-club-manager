@@ -2,7 +2,9 @@ package org.npvb.scm.web.rest;
 
 import org.npvb.scm.ScmApp;
 import org.npvb.scm.domain.Authority;
+import org.npvb.scm.domain.Member;
 import org.npvb.scm.domain.User;
+import org.npvb.scm.repository.MemberRepository;
 import org.npvb.scm.repository.UserRepository;
 import org.npvb.scm.security.AuthoritiesConstants;
 import org.npvb.scm.service.MailService;
@@ -78,6 +80,9 @@ public class UserResourceIntTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     private MailService mailService;
@@ -520,6 +525,9 @@ public class UserResourceIntTest {
     public void deleteUser() throws Exception {
         // Initialize the database
         userRepository.saveAndFlush(user);
+        Member member = new Member();
+        member.setUser(user);
+        memberRepository.saveAndFlush(member);
         int databaseSizeBeforeDelete = userRepository.findAll().size();
 
         // Delete the user

@@ -434,7 +434,7 @@ public class AccountResourceIntTest {
 
         UserDTO userDTO = new UserDTO(
             null,                   // id
-            "not-used",          // login
+            "save-account",          // login
             "firstname",                // firstName
             "lastname",                  // lastName
             "save-account@example.com",    // email
@@ -568,7 +568,7 @@ public class AccountResourceIntTest {
 
         UserDTO userDTO = new UserDTO(
             null,                   // id
-            "not-used",          // login
+            "save-existing-email-and-login",          // login
             "firstname",                // firstName
             "lastname",                  // lastName
             "save-existing-email-and-login@example.com",    // email
